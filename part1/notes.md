@@ -2,7 +2,7 @@
 
 ## 1a - Introduction to React
 
-Using `npx create-react-app [name]` will create a React app quickly and configure it for: git, JSX usage, Babel transpiling, etc.
+Using `npx create-react-app [name]` will create a React app quickly and configure it for git, JSX usage, Babel transpiling, etc.
 
 ### Component
 
@@ -32,7 +32,7 @@ Every component must have a root level element. When adding an unnecessary root 
 
 ### JSX
 
-React componenets compile JSX into JavaScript.
+React components compile JSX into JavaScript.
 
 Before:
 
@@ -84,12 +84,14 @@ The Hello component:
 ```js
 const Hello = (props) => {  return (
     <div>
-      <p>Hello {props.name}</p>    </div>
+      <p>Hello {props.name}</p>
+    </div>
   )
 }
 ```
 
 The App component that calls it:
+
 ```js
 const App = () => {
   return (
@@ -128,8 +130,11 @@ console.log(t[1])     // -1 is printed
 t.forEach(value => {
   console.log(value)  // numbers 1, -1, 3, 5 are printed, each to own line
 })          
+```
 
-// functional programming paradigm considerations
+Functional programming paradigm considerations:
+
+```js
 const t = [1, -1, 3]
 
 const t2 = t.concat(5)
@@ -182,17 +187,26 @@ const sum = (p1, p2) => {
 
 const result = sum(1, 5)
 console.log(result)
+```
 
-// functions with a single parameter can be declared as such
+Functions with a single parameter can be declared as such
+
+```js
 const square = p => {
   console.log(p)
   return p * p
 }
+```
 
-// functions with only a single expression
+Functions with only a single expression:
+
+```js
 const square = p => p * p
+```
 
-// an example, using map
+An example, using map.
+
+```js
 const t = [1, 2, 3]
 const tSquared = t.map(p => p * p)
 // tSquared is now [1, 4, 9]
