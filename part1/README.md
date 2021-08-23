@@ -258,3 +258,5 @@ adam.greet()
 const janja = new Person('Janja Garnbret', 22)
 janja.greet()
 ```
+
+## 1c - Component state, event handlers
