@@ -211,3 +211,50 @@ const t = [1, 2, 3]
 const tSquared = t.map(p => p * p)
 // tSquared is now [1, 4, 9]
 ```
+
+### Object Methods, this
+
+Assign methods to an object by defining properties that are functions:
+
+```js
+const arto = {
+  name: 'Arto Hellas',
+  age: 35,
+  education: 'PhD',
+  greet: function()
+  {
+    console.log('hello, my name is ' + this.name)
+  },
+}
+
+arto.greet()  // "hello, my name is Arto Hellas" gets printed
+
+// methods can be assigned after creation of the object
+arto.growOlder = function() {
+  this.age += 1
+}
+```
+
+Good programming practice in JavaScript dictates that the keyword "this" is avoided: depending on the scope of the function that calls the object method, this could refer to the object itself, the calling function, or a global object.
+
+### Classes
+
+JavaScript only defines the types Boolean, Null, Undefined, Number, String, Symbol, BigInt, and Object. Classes can be created, which is of type Object under the hood, that are reminiscent of object-oriented languages.
+
+```js
+class Person {
+  constructor(name, age) {
+    this.name = name
+    this.age = age
+  }
+  greet() {
+    console.log('hello, my name is ' + this.name)
+  }
+}
+
+const adam = new Person('Adam Ondra', 35)
+adam.greet()
+
+const janja = new Person('Janja Garnbret', 22)
+janja.greet()
+```
