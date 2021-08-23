@@ -260,3 +260,105 @@ janja.greet()
 ```
 
 ## 1c - Component state, event handlers
+
+### Component Helper Functions
+
+Add component helper functions to components; they will be called when a component is rendered.
+
+```js
+const Hello = (props) => {
+  const bornYear = () => {    const yearNow = new Date().getFullYear()    return yearNow - props.age  }
+  return (
+    <div>
+      <p>
+        Hello {props.name}, you are {props.age} years old
+      </p>
+      <p>So you were probably born in {bornYear()}</p>    </div>
+  )
+}
+```
+
+### Destructuring
+
+ES6 allows programmers to destructure values from objects and arrays upon assignment. For example, if we had a `props` object with `name` and `age` properties, they could be destructured as such:
+
+```js
+props = {
+  name: 'Arto Hellas',
+  age: 35,
+}
+
+// before destructuring is implemented
+const Hello = (props) => {
+  const name = props.name
+  const age = props.age
+
+  const bornYear = () => new Date().getFullYear() - age
+
+  return (
+    <div>
+      <p>Hello {name}, you are {age} years old</p>
+      <p>So you were probably born in {bornYear()}</p>
+    </div>
+  )
+}
+
+// after destructuring is implemented
+const Hello = ({ name, age }) => {
+  const bornYear = () => new Date().getFullYear() - age
+
+  return (
+    <div>
+      <p>Hello {name}, you are {age} years old</p>
+      <p>So you were probably born in {bornYear()}</p>
+    </div>
+  )
+}
+```
+
+### Stateful Components
+
+In order to efficiently re-render pages, add state to components.
+
+```js
+import React, { useState } from 'react'
+
+const App = () => {
+  const [ counter, setCounter ] = useState(0)
+
+  setTimeout(
+    () => setCounter(counter + 1),
+    1000
+  )
+
+  return (
+    <div>{counter}</div>
+  )
+}
+
+export default App
+```
+
+### Event Handling
+
+Event handlers are registered to be called when specific events occur, such as a page click.
+
+```js
+const App = () => {
+  const [ counter, setCounter ] = useState(0)
+
+  return (
+    <div>
+      <div>{counter}</div>
+      <button onClick={() => setCounter(counter + 1)}>
+        plus
+      </button>
+      <button onClick={() => setCounter(0)}>
+        zero
+      </button>
+    </div>
+  )
+}
+```
+
+Take care to use a function or function reference for event handlers, not a call to a function (`() => setCounter(0)` instead of `setCounter(0)`).
