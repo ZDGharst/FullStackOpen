@@ -1,7 +1,5 @@
 import React from 'react'
 
-const Display = (props) => (
-    <div>{props.counter}</div>
-)
+const Display = ({ counter }) => <div>{counter}</div>
 
 export default Display
