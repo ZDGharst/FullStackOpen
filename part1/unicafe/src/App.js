@@ -5,8 +5,17 @@ const Statistic = ({ label, value })  => <p>{label}: {value}</p>
 
 const Statistics = ({ good, neutral, bad }) => {
   const calculateTotal    = good + neutral + bad
-  const calculateAverage  = calculateTotal === 0 ? '' : (good - bad) / calculateTotal
-  const calculatePositive = calculateTotal === 0 ? '' : good / calculateTotal + '%'
+  if(calculateTotal === 0)
+  {
+    return (
+      <>
+        <h2>Statistics</h2>
+        <p>No feedback given.</p>
+      </>
+    )
+  }
+  const calculateAverage  = (good - bad) / calculateTotal
+  const calculatePositive = good / calculateTotal + '%'
 
   return (
     <>
