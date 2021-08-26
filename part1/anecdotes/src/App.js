@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 
+let mostVotes = 0
+
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
 
 const App = () => {
@@ -21,6 +23,11 @@ const App = () => {
     return () => {
       const copy = [...points]
       copy[anecdote] += 1
+
+      if(copy[mostVotes] < copy[anecdote]) {
+        mostVotes = anecdote
+      }
+
       setPoints(copy)
     }
   }
@@ -28,10 +35,16 @@ const App = () => {
 
   return (
     <div>
+      <h1>Anecdotes</h1>
+
+      <h2>Anecdote of the day</h2>
       <p>{anecdotes[selected]}</p>
       <p>Votes: {points[selected]}</p>
       <Button onClick={voteFor(selected)} text='vote' />
       <Button onClick={randomSelection} text='next anecdote' />
+      
+      <h2>Anecdote with most votes</h2>
+      <p>{anecdotes[mostVotes]}</p>
     </div>
   )
 }
