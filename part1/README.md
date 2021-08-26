@@ -362,3 +362,89 @@ const App = () => {
 ```
 
 Take care to use a function or function reference for event handlers, not a call to a function (`() => setCounter(0)` instead of `setCounter(0)`).
+
+## 1d - A more complex state, debugging React apps
+
+### Complex state, handling arrays
+
+You can use objects or arrays to encase multiple states. Doing this, it may be best to use the object spread syntax to copy objects to then modify them before passing them as a new state point.
+
+```js
+const clicks = {
+  left: 0,
+  right: 0
+}
+
+const copy = {
+  ...clicks,
+  left: clicks.left + 1
+}
+
+const arr = Array(5).fill(0)
+const arrCopy = [...arr]
+```
+
+### Conditional rendering
+
+Use `if` statements to return different values based on the state of the application.
+
+### Old React, debugging React applications
+
+Old React uses class components; new React prefers hooks. It's important to know class syntax for working on legacy code.
+
+Tips for debugging React applications:
+
+- Keep the browser's console open at all times
+- Fix errors as they happen rather than continuing to code
+- Old school print debugging is always a good idea.
+- Use breakpoints within Chrome developer tools.
+- Write debugger anywhere in your code to use Chrome's developer debugger.
+
+### Rules of Hooks
+
+Do not call `useState` within conditionals, loops, and non-component functions.
+
+### Event Handling Revisited
+
+Event handlers should be functions or function references rather than calls to functions:
+
+```js
+// this is a function call; it will immediately log to console when page renders,
+// and its return value will be set to onClick
+<button onClick={console.log('clicked the button')}>
+  button
+</button>
+
+// this is a function; it will be called when the onClick happens
+<button onClick={() => console.log('clicked the button')}>
+  button
+</button>
+```
+
+### Function that returns a function
+
+Because of the previous section, it's often useful to have a function that returns a function within it so that the desired effect isn't called on an event handle. The nested function's reference is returned by the original function on page render.
+
+```js
+const hello = () => {
+  const handler = () => console.log('hello world')
+  return handler
+}
+
+// or
+
+const hello = () => {
+  return () => console.log('hello world')
+}
+
+<button onClick={hello()}>button</button>
+
+// allows for parameters
+const setToValue = (newValue) => () => {
+  setValue(newValue)
+}
+
+<button onClick={setToValue(1000)}>thousand</button>
+<button onClick={setToValue(0)}>reset</button>
+<button onClick={setToValue(value + 1)}>increment</button>
+```
