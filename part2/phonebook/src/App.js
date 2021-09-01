@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-
-const Person = ({ person }) => <tr><td>{person.name}</td><td>{person.number}</td></tr>
-const FormItem = ({ text, value, onChange }) => <div><label>{text}</label> <input value={value} onChange={onChange} /></div>
+import FilterForm from './components/FilterForm'
+import AddPersonForm from './components/AddPersonForm'
+import Directory from './components/Directory'
 
 const App = () => {
   const [ persons, setPersons ] = useState([
@@ -41,23 +41,19 @@ const App = () => {
   return (
     <>
       <h1>Phonebook</h1>
-      <form>
-        <FormItem Item text='Filter by name' value={filter} onChange={handleFilterChange} />
-      </form>
+      <FilterForm value={filter} onChange={handleFilterChange} />
 
       <h2>Add Entry</h2>
-      <form onSubmit={addPerson}>
-        <FormItem text='Name'   value={newName}   onChange={handleNameChange} />
-        <FormItem text='Number' value={newNumber} onChange={handleNumberChange} />
-        <div>
-          <button type="submit">Add</button>
-        </div>
-      </form>
-
+      <AddPersonForm
+        addPerson={addPerson}
+        name={newName}
+        handleNameChange={handleNameChange}
+        number={newNumber}
+        handleNumberChange={handleNumberChange}
+      />
+      
       <h2>Directory</h2>
-      <table><thead>
-        {persons.filter(person => person.name.toLowerCase().indexOf(filter.toLowerCase()) > -1).map(person => <Person key={person.name} person={person} />)}
-      </thead></table>
+      <Directory persons={persons} filter={filter} />
     </>
   )
 }
