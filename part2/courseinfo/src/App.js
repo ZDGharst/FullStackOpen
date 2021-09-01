@@ -13,7 +13,7 @@ const Header = ({ course }) => (
 
 const Content = ({ course }) => (
   <>
-    {course.parts.map(part => <Part part={part} />)}
+    {course.parts.map(part => <Part key={part.id} part={part} />)}
   </>
 )
 
