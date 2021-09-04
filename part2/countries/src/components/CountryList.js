@@ -9,12 +9,12 @@ const CountryList = ({ countries, filter }) => {
 
   const filteredCountries = countries.filter(country => country.name.toLowerCase().indexOf(filter.toLowerCase()) > -1)
 
-  if(filteredCountries.length === 0) {
-    return <p>Zero matches, specify another filter</p>
-  }
-
   if(filteredCountries.length > 10) {
     return <p>Too many matches, specify another filter</p>
+  }
+
+  if(filteredCountries.length === 0) {
+    return <p>Zero matches, specify another filter</p>
   }
 
   if(filteredCountries.length === 1) {
