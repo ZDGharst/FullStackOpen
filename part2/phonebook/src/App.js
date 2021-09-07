@@ -3,28 +3,36 @@ import React, { useEffect, useState } from 'react'
 import AddPersonForm from './components/AddPersonForm'
 import Directory from './components/Directory'
 import FilterForm from './components/FilterForm'
+import Notification from './components/Notification'
 import personService from './services/person'
 
 const App = () => {
-  const [ persons, setPersons ]     = useState([])
-  const [ newName, setNewName ]     = useState('')
-  const [ newNumber, setNewNumber ] = useState('')
-  const [ filter, setFilter ]       = useState('')
+  const [ persons, setPersons ]           = useState([])
+  const [ newName, setNewName ]           = useState('')
+  const [ newNumber, setNewNumber ]       = useState('')
+  const [ filter, setFilter ]             = useState('')
+  const [ notification, setNotification ] = useState(null)
 
   const handleNameChange   = (event) => setNewName(event.target.value)
   const handleNumberChange = (event) => setNewNumber(event.target.value)
   const handleFilterChange = (event) => setFilter(event.target.value)
 
+  const fetchPersons = () => personService.getAll().then(personResponse => {
+    setPersons(personResponse)
+  })
+  useEffect(fetchPersons, [])
+
   const addPerson = (event) => {
     event.preventDefault()
     const newPerson = { name: newName, number: newNumber }
 
-    const id = persons.find(p => p.name === newName).id
+    const lookupPerson = persons.find(p => p.name === newName)
 
-    if(id) {
+    if(lookupPerson) {
       if(window.confirm(`The name '${newName}' is already added to phonebook. Would you like to replace the old number with the new one?`)) {
-        personService.update(id, newPerson).then(returnedPerson => {
-          setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+        personService.update(lookupPerson.id, newPerson).then(returnedPerson => {
+          setPersons(persons.map(person => person.id !== lookupPerson.id ? person : returnedPerson))
+          setNotification(`Updated '${newName}' in the phonebook.'`)
         })
       }
       return
@@ -39,25 +47,26 @@ const App = () => {
       setPersons(persons.concat(returnedPerson))
       setNewName('')
       setNewNumber('')
+      setNotification(`Added '${newName}' to the phonebook.'`)
     })
   }
 
-  const fetchPersons = () => personService.getAll().then(personResponse => {
-    setPersons(personResponse)
-  })
-  useEffect(fetchPersons, [])
-
   const removePerson = (id) => {
+    const lookupPerson = persons.find(p => p.id === id)
+
     return () => {
       personService.remove(id).then(response => {
+        setNotification(`Removed '${lookupPerson.name}' from the phonebook.'`)
         setPersons(persons.filter(person => person.id !== id))
       })
     }
   }
 
+
   return (
     <>
       <h1>Phonebook</h1>
+      <Notification message={notification} />
       <FilterForm value={filter} onChange={handleFilterChange} />
 
       <h2>Add Entry</h2>
