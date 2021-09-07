@@ -22,7 +22,7 @@ code {
   margin: 10px;
 }
 
-.error {
+.error, .critical {
   color: red;
   background: lightgrey;
   font-size: 20px;

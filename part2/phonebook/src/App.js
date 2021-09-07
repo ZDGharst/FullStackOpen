@@ -19,16 +19,22 @@ const App = () => {
   const handleFilterChange = (event) => setFilter(event.target.value)
 
   const handleNotificationChange = (message, type) => {
+    let timer = 5000
+    if(type === 'critical') {
+      timer = 30000
+    }
     setNotification(message)
     setNotifType(type)
   
     setTimeout(() => {
       setNotification(null)
-    }, 5000)
+    }, timer)
   }
 
   const fetchPersons = () => personService.getAll().then(personResponse => {
     setPersons(personResponse)
+  }).catch(error => {
+    handleNotificationChange(`Couldn't connect to backend service. Please try again later.`, 'critical')
   })
   useEffect(fetchPersons, [])
 
@@ -42,14 +48,17 @@ const App = () => {
       if(window.confirm(`The name '${newName}' is already added to phonebook. Would you like to replace the old number with the new one?`)) {
         personService.update(lookupPerson.id, newPerson).then(returnedPerson => {
           setPersons(persons.map(person => person.id !== lookupPerson.id ? person : returnedPerson))
-          handleNotificationChange(`Updated '${newName}' in the phonebook.'`, 'success')
+          handleNotificationChange(`Updated '${newName}' in the phonebook.`, 'success')
+        }).catch(error => {
+          handleNotificationChange(`Couldn't update '${newName}'.`, 'error')
         })
       }
+      handleNotificationChange(`Didn't update '${newName}' in the phonebook.'`, 'error')
       return
     }
 
     if(persons.some(p => p.number === newNumber)) {
-      alert(`The phone number ${newNumber} is already added to phonebook`)
+      handleNotificationChange(`The phone number ${newNumber} is already added to phonebook`, 'error')
       return
     }
 
@@ -58,6 +67,8 @@ const App = () => {
       setNewName('')
       setNewNumber('')
       handleNotificationChange(`Added '${newName}' to the phonebook.'`, 'success')
+    }).catch(error => {
+      handleNotificationChange(`Couldn't add '${newName}'.`, 'critical')
     })
   }
 
@@ -68,6 +79,12 @@ const App = () => {
       personService.remove(id).then(response => {
         setPersons(persons.filter(person => person.id !== id))
         handleNotificationChange(`Removed '${lookupPerson.name}' from the phonebook.'`, 'success')
+      }).catch(error => {
+        if(error.response) {
+          handleNotificationChange(`${lookupPerson.name} doesn't exist or was already removed from the phonebook.`, 'error')
+        } else if(error.request) {
+          handleNotificationChange(`Couldn't find the backend service. Please try again later.`, 'critical')
+        }
       })
     }
   }
