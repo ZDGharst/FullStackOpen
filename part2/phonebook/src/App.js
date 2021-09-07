@@ -12,10 +12,20 @@ const App = () => {
   const [ newNumber, setNewNumber ]       = useState('')
   const [ filter, setFilter ]             = useState('')
   const [ notification, setNotification ] = useState(null)
+  const [ notifType, setNotifType ]       = useState(null)
 
   const handleNameChange   = (event) => setNewName(event.target.value)
   const handleNumberChange = (event) => setNewNumber(event.target.value)
   const handleFilterChange = (event) => setFilter(event.target.value)
+
+  const handleNotificationChange = (message, type) => {
+    setNotification(message)
+    setNotifType(type)
+  
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+  }
 
   const fetchPersons = () => personService.getAll().then(personResponse => {
     setPersons(personResponse)
@@ -32,7 +42,7 @@ const App = () => {
       if(window.confirm(`The name '${newName}' is already added to phonebook. Would you like to replace the old number with the new one?`)) {
         personService.update(lookupPerson.id, newPerson).then(returnedPerson => {
           setPersons(persons.map(person => person.id !== lookupPerson.id ? person : returnedPerson))
-          setNotification(`Updated '${newName}' in the phonebook.'`)
+          handleNotificationChange(`Updated '${newName}' in the phonebook.'`, 'success')
         })
       }
       return
@@ -47,7 +57,7 @@ const App = () => {
       setPersons(persons.concat(returnedPerson))
       setNewName('')
       setNewNumber('')
-      setNotification(`Added '${newName}' to the phonebook.'`)
+      handleNotificationChange(`Added '${newName}' to the phonebook.'`, 'success')
     })
   }
 
@@ -56,8 +66,8 @@ const App = () => {
 
     return () => {
       personService.remove(id).then(response => {
-        setNotification(`Removed '${lookupPerson.name}' from the phonebook.'`)
         setPersons(persons.filter(person => person.id !== id))
+        handleNotificationChange(`Removed '${lookupPerson.name}' from the phonebook.'`, 'success')
       })
     }
   }
@@ -66,7 +76,7 @@ const App = () => {
   return (
     <>
       <h1>Phonebook</h1>
-      <Notification message={notification} />
+      <Notification message={notification} type={notifType} />
       <FilterForm value={filter} onChange={handleFilterChange} />
 
       <h2>Add Entry</h2>
