@@ -5,7 +5,7 @@ import Directory from './components/Directory'
 import personService from './services/person'
 
 const App = () => {
-  const [ persons, setPersons ]       = useState([])
+  const [ persons, setPersons ]     = useState([])
   const [ newName, setNewName ]     = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter ]       = useState('')
@@ -40,6 +40,14 @@ const App = () => {
     })
   }
 
+  const removePerson = (id) => {
+    return () => {
+      personService.remove(id).then(response => {
+        setPersons(persons.filter(person => person.id !== id))
+      })
+    }
+  }
+
   return (
     <>
       <h1>Phonebook</h1>
@@ -55,7 +63,7 @@ const App = () => {
       />
       
       <h2>Directory</h2>
-      <Directory persons={persons} filter={filter} />
+      <Directory persons={persons} filter={filter} remove={removePerson} />
     </>
   )
 }
