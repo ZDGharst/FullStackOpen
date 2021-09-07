@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import FilterForm from './components/FilterForm'
+
 import AddPersonForm from './components/AddPersonForm'
 import Directory from './components/Directory'
+import FilterForm from './components/FilterForm'
 import personService from './services/person'
 
 const App = () => {
@@ -9,11 +10,6 @@ const App = () => {
   const [ newName, setNewName ]     = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter ]       = useState('')
-
-  const fetchPersons = () => personService.getAll().then(personResponse => {
-    setPersons(personResponse)
-  })
-  useEffect(fetchPersons, [])
 
   const handleNameChange   = (event) => setNewName(event.target.value)
   const handleNumberChange = (event) => setNewNumber(event.target.value)
@@ -23,9 +19,10 @@ const App = () => {
     event.preventDefault()
     const newPerson = { name: newName, number: newNumber }
 
-    if(persons.some(p => p.name === newName)) {
+    const id = persons.find(p => p.name === newName).id
+
+    if(id) {
       if(window.confirm(`The name '${newName}' is already added to phonebook. Would you like to replace the old number with the new one?`)) {
-        const id = persons.find(p => p.name === newName).id
         personService.update(id, newPerson).then(returnedPerson => {
           setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
         })
@@ -44,6 +41,11 @@ const App = () => {
       setNewNumber('')
     })
   }
+
+  const fetchPersons = () => personService.getAll().then(personResponse => {
+    setPersons(personResponse)
+  })
+  useEffect(fetchPersons, [])
 
   const removePerson = (id) => {
     return () => {
