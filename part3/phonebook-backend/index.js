@@ -1,13 +1,14 @@
 require('dotenv').config()
 
 const cors = require('cors')
+const { response } = require('express')
 const express = require('express')
 const morgan = require('morgan')
 const Person = require('./models/person')
 
 const app = express()
-app.use(express.json())
 app.use(express.static('build'))
+app.use(express.json())
 app.use(cors())
 app.use(morgan((tokens, req, res) => {
   return [
@@ -94,10 +95,10 @@ app.post('/api/persons', (req, res) => {
 })
 
 app.delete('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
-  persons = persons.filter(person => person.id !== id)
-
-  res.status(204).end()
+  Person.findByIdAndRemove(req.params.id)
+    .then(result => {
+      res.status(204).end()
+    })
 })
 
 const PORT = process.env.PORT
