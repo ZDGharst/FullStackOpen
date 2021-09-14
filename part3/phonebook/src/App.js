@@ -50,7 +50,7 @@ const App = () => {
           setPersons(persons.map(person => person.id !== lookupPerson.id ? person : returnedPerson))
           handleNotificationChange(`Updated '${newName}' in the phonebook.`, 'success')
         }).catch(error => {
-          handleNotificationChange(`Couldn't update '${newName}'.`, 'error')
+          handleNotificationChange(`Couldn't update '${newName}'. ${error.response.data.error}`, 'error')
         })
       }
       handleNotificationChange(`Didn't update '${newName}' in the phonebook.'`, 'error')
@@ -68,7 +68,8 @@ const App = () => {
       setNewNumber('')
       handleNotificationChange(`Added '${newName}' to the phonebook.'`, 'success')
     }).catch(error => {
-      handleNotificationChange(`Couldn't add '${newName}'.`, 'critical')
+      handleNotificationChange(`Couldn't add '${newName}'. ${error.response.data.error}`, 'error')
+      console.log(error.response.data.error)
     })
   }
 
