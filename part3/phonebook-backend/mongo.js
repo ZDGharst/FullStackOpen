@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-if (process.argv.length != 5 && process.argv.length != 3) {
+if (process.argv.length !== 5 && process.argv.length !== 3) {
   console.log('Progam accepts either one or three parameters.\n')
   console.log('To retrieve all phonebook entries:\n\tUsage: node mongo.js <password>')
   console.log('To add a phonebook entry:\n\tUsage: node mongo.js <password> <name> <number>')
@@ -17,7 +17,7 @@ const personSchema = new mongoose.Schema({
 })
 const Person = mongoose.model('Person', personSchema)
 
-if(process.argv.length == 3) {
+if(process.argv.length === 3) {
   console.log('phonebook:')
   Person.find({}).then(result => {
     result.forEach(person => {
@@ -29,13 +29,13 @@ if(process.argv.length == 3) {
 else {
   const name = process.argv[3]
   const number = process.argv[4]
-  
+
   const person = new Person({
     name: name,
     number: number
   })
-  
-  person.save().then(result => {
+
+  person.save().then(() => {
     console.log(`added ${name} number ${number} to phonebook`)
     mongoose.connection.close()
   })

@@ -1,7 +1,6 @@
 require('dotenv').config()
 
 const cors = require('cors')
-const { response } = require('express')
 const express = require('express')
 const morgan = require('morgan')
 const Person = require('./models/person')
@@ -47,8 +46,8 @@ app.post('/api/persons', (req, res, next) => {
   const body = req.body
 
   if(!body.name || !body.number) {
-    return res.status(400).json({ 
-      error: 'content missing' 
+    return res.status(400).json({
+      error: 'content missing'
     })
   }
 
@@ -70,7 +69,7 @@ app.put('/api/persons/:id', (req, res, next) => {
     number: body.number,
   }
 
-  Person.findOneAndUpdate({_id: req.params.id}, person, { new: true, runValidators: true })
+  Person.findOneAndUpdate({ _id: req.params.id }, person, { new: true, runValidators: true })
     .then(updatedPerson => {
       if(updatedPerson) {
         res.json(updatedPerson)
@@ -83,7 +82,7 @@ app.put('/api/persons/:id', (req, res, next) => {
 
 app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndRemove(req.params.id)
-    .then(result => {
+    .then(() => {
       res.status(204).end()
     }).catch(error => next(error))
 })
