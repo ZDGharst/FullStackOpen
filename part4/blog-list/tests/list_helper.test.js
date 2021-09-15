@@ -86,3 +86,20 @@ describe('favorite', () => {
     expect(result).toEqual({})
   })
 })
+
+describe('most prolific author', () => {
+  test('most prolific author of all blogs', () => {
+    const result = listHelper.mostProlificAuthor(blogs)
+    expect(result).toEqual({ author: "Robert C. Martin", blogs: 3 })
+  })
+
+  test('favorite blog of a single blog', () => {
+    const result = listHelper.mostProlificAuthor(singleBlog)
+    expect(result).toEqual({ author: "Michael Chan", blogs: 1 })
+  })
+
+  test('favorite blog of no blogs', () => {
+    const result = listHelper.mostProlificAuthor([])
+    expect(result).toEqual({})
+  })
+})
