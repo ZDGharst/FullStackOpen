@@ -152,3 +152,107 @@ After running `npm run build`, move the build folder to the backend folder and s
 ```
 
 You may need to add a proxy to the frontend React project for handling pathing now. Within package.json: `"proxy": "http://localhost:3001"`.
+
+## MongoDB
+
+MongoDB is a document database which falls under the NoSQL term. Install of installing MongoDB locally, you can use MongoDB Atlas to create clusters (and thus databases). MongoDB Atlas gives you the option of using AWS, Google Cloud, or Azure for provider. Remember to create a new user, give it access to the database, and only allow certain IP addresses. Once you've done this, you'll have a connection string.
+
+Mongoose is a friendly library that provides a pleasing interface when working with MongoDB. 
+
+Example connection and usage:
+
+```js
+const mongoose = require('mongoose')
+
+if (process.argv.length < 3) {
+  console.log('Please provide the password as an argument: node mongo.js <password>')
+  process.exit(1)
+}
+
+const password = process.argv[2]
+
+const url =
+  `mongodb+srv://fullstack:${password}@cluster0-ostce.mongodb.net/test?retryWrites=true`
+
+mongoose.connect(url)
+
+const noteSchema = new mongoose.Schema({
+  content: String,
+  date: Date,
+  important: Boolean,
+})
+
+const Note = mongoose.model('Note', noteSchema)
+
+const note = new Note({
+  content: 'HTML is Easy',
+  date: new Date(),
+  important: true,
+})
+
+note.save().then(result => {
+  console.log('note saved!')
+  mongoose.connection.close()
+})
+```
+
+## Fetching objects with Mongoose
+
+Fetching all objects:
+
+```js
+Note.find({}).then(result => {
+  result.forEach(note => {
+    console.log(note)
+  })
+  mongoose.connection.close()
+})
+```
+
+Filtering:
+
+```js
+Note.find({ important: true }).then(result => {
+  // ...
+})
+```
+
+Error handling:
+
+```js
+app.get('/api/notes/:id', (request, response) => {
+  Note.findById(request.params.id)
+    .then(note => {
+      if (note) {
+        response.json(note)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => {
+      console.log(error)
+      response.status(500).end()
+    })
+})
+```
+
+## Adding constraints to schema
+
+```js
+const noteSchema = new mongoose.Schema({
+  content: {
+    type: String,
+    minLength: 5,
+    required: true
+  },
+  date: {
+    type: Date,
+    required: true
+    },
+  important: Boolean
+})
+```
+
+## Using dotenv
+
+Installing dotenv allows you to hold environment variables in a .env file, such as MONGODB_URI or PORT.
