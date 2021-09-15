@@ -33,8 +33,32 @@ const mostProlificAuthor = (blogs) => {
   return { author: mostProlific, blogs: count[mostProlific] }
 }
 
+const mostLikedAuthor = (blogs) => {
+  if(blogs.length === 0) {
+    return {}
+  }
+  
+  let count = {}
+  let mostLiked = blogs[0].author
+
+  blogs.forEach(blog => {
+    if(blog.author in count) {
+      count[blog.author] += blog.likes
+    } else {
+      count[blog.author] = blog.likes
+    }
+
+    if(count[blog.author] > count[mostLiked]) {
+      mostLiked = blog.author
+    }
+  })
+
+  return { author: mostLiked, likes: count[mostLiked] }
+}
+
 module.exports = {
   totalLikes,
   favoriteBlog,
-  mostProlificAuthor
+  mostProlificAuthor,
+  mostLikedAuthor
 }

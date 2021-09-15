@@ -93,13 +93,30 @@ describe('most prolific author', () => {
     expect(result).toEqual({ author: "Robert C. Martin", blogs: 3 })
   })
 
-  test('favorite blog of a single blog', () => {
+  test('most prolific author of a single blog', () => {
     const result = listHelper.mostProlificAuthor(singleBlog)
     expect(result).toEqual({ author: "Michael Chan", blogs: 1 })
   })
 
-  test('favorite blog of no blogs', () => {
+  test('most prolific author of no blogs', () => {
     const result = listHelper.mostProlificAuthor([])
+    expect(result).toEqual({})
+  })
+})
+
+describe('most liked author', () => {
+  test('most liked author of all blogs', () => {
+    const result = listHelper.mostLikedAuthor(blogs)
+    expect(result).toEqual({ author: "Edsger W. Dijkstra", likes: 17 })
+  })
+
+  test('most liked author of a single blog', () => {
+    const result = listHelper.mostLikedAuthor(singleBlog)
+    expect(result).toEqual({ author: "Michael Chan", likes: 7 })
+  })
+
+  test('most liked author of no blogs', () => {
+    const result = listHelper.mostLikedAuthor([])
     expect(result).toEqual({})
   })
 })
