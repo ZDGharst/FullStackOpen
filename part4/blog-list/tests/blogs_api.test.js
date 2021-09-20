@@ -41,7 +41,7 @@ const initialBlogs = [
     author: "Robert C. Martin",
     url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
     likes: 2
-  }  
+  }
 ]
 
 beforeEach(async () => {
@@ -95,6 +95,19 @@ describe('POST methods from API', () => {
 
     const contents = response.body.map(r => r.title)
     expect(contents).toContain(newBlog.title)
+  })
+})
+
+describe('random', () => {
+  test('missing likes property results in zero', () => {
+    const testBlog = {
+      title: "Tidying up the Go web experience",
+      author: "Russ Cox",
+      url: "https://go.dev/blog/tidy-web"
+    }
+
+    const blogObject = new Blog(testBlog)
+    expect(blogObject.likes).toBe(0)
   })
 })
 
