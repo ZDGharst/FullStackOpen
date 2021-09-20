@@ -52,29 +52,50 @@ beforeEach(async () => {
   await Promise.all(promiseArray)
 })
 
-test('blogs are returned as json', async () => {
-  await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
+describe('GET methods from API', () => {
+  test('blogs are returned as json', async () => {
+    await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('all blogs are returned', async () => {
+    const response = await api.get('/api/blogs')
+
+    expect(response.body).toHaveLength(initialBlogs.length)
+  })
+
+  test('a specific blog is within the returned blogs', async () => {
+    const response = await api.get('/api/blogs')
+    const contents = response.body.map(r => r.title)
+
+    expect(contents).toContain('React patterns')
+  })
+
+  test('check if _id is renamed to id', async () => {
+    const response = await api.get('/api/blogs')
+    expect(response.body[0].id).toBeDefined()
+  })
 })
 
-test('all blogs are returned', async () => {
-  const response = await api.get('/api/blogs')
+describe('POST methods from API', () => {
+  test('add new blog via POST', async () => {
+    const newBlog = {
+      title: "Tidying up the Go web experience",
+      author: "Russ Cox",
+      url: "https://go.dev/blog/tidy-web",
+      likes: 31
+    }
 
-  expect(response.body).toHaveLength(initialBlogs.length)
-})
+    await api.post('/api/blogs').set('Content-type', 'application/json').send(newBlog).expect(201)
+  
+    const response = await api.get('/api/blogs')
+    expect(response.body).toHaveLength(initialBlogs.length + 1)
 
-test('a specific blog is within the returned blogs', async () => {
-  const response = await api.get('/api/blogs')
-  const contents = response.body.map(r => r.title)
-
-  expect(contents).toContain('React patterns')
-})
-
-test('check if _id is renamed to id', async () => {
-  const response = await api.get('/api/blogs')
-  expect(response.body[0].id).toBeDefined()
+    const contents = response.body.map(r => r.title)
+    expect(contents).toContain(newBlog.title)
+  })
 })
 
 afterAll(() => {
