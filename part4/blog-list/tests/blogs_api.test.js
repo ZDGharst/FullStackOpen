@@ -96,6 +96,32 @@ describe('POST methods from API', () => {
     const contents = response.body.map(r => r.title)
     expect(contents).toContain(newBlog.title)
   })
+
+  test('new blog without title should fail', async () => {
+    const newBlog = {
+      author: "Russ Cox",
+      url: "https://go.dev/blog/tidy-web",
+      likes: 31
+    }
+
+    await api.post('/api/blogs').set('Content-type', 'application/json').send(newBlog).expect(400)
+  
+    const response = await api.get('/api/blogs')
+    expect(response.body).toHaveLength(initialBlogs.length)
+  })
+
+  test('new blog without url should fail', async () => {
+    const newBlog = {
+      title: "Tidying up the Go web experience",
+      author: "Russ Cox",
+      likes: 31
+    }
+
+    await api.post('/api/blogs').set('Content-type', 'application/json').send(newBlog).expect(400)
+  
+    const response = await api.get('/api/blogs')
+    expect(response.body).toHaveLength(initialBlogs.length)
+  })
 })
 
 describe('random', () => {
