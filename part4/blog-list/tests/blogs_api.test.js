@@ -88,7 +88,7 @@ describe('POST methods from API', () => {
 describe('DELETE methods from API', () => {
   test('delete blog from blog list', async () => {
     const blogsAtStart = await helper.blogsInDb()
-    const { id } = blogsAtStart[0]
+    const { id, title } = blogsAtStart[0]
 
     await api.delete(`/api/blogs/${id}`).expect(204)
 
@@ -96,7 +96,28 @@ describe('DELETE methods from API', () => {
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
     
     const contents = blogsAtEnd.map(r => r.title)
-    expect(contents).not.toContain(blogsAtStart[0].title)
+    expect(contents).not.toContain(title)
+  })
+})
+
+describe('PUT methods from API', () => {
+  test('update blog in the blog list', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+
+    blogUpdate = {
+      ...blogToUpdate,
+      title: 'New blog title'
+    }
+
+    await api.put(`/api/blogs/${blogToUpdate.id}`)
+      .set('Content-type', 'application/json')
+      .send(blogUpdate)
+      .expect(200)
+
+    const blogsAtEnd = await helper.blogsInDb()    
+    const contents = blogsAtEnd.map(r => r.title)
+    expect(contents).toContain('New blog title')
   })
 })
 
