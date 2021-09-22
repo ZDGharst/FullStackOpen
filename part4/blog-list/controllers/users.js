@@ -10,6 +10,18 @@ usersRouter.get('/', async (request, response) => {
 usersRouter.post('/', async (request, response) => {
   const body = request.body
 
+  if(body.password == null) {
+    return response.status(400).json({
+      error: 'User validation failed: password: Password must be given.'
+    })
+  }
+
+  if(body.password.length < 4) {
+    return response.status(400).json({
+      error: 'User validation failed: password: Password too short.'
+    })
+  }
+
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(body.password, saltRounds)
 
