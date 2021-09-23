@@ -45,7 +45,6 @@ blogsRouter.delete('/:id', async (request, response) => {
   } else {
     response.status(401).json({ error: 'wrong user token' })
   }
-
 })
 
 blogsRouter.put('/:id', async (request, response) => {
