@@ -1,6 +1,6 @@
 POST http://localhost:3003/api/blogs/
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlJlblNoZXJib3VybmUiLCJpZCI6IjYxNDkyODg0MjhmZjZlMmYxYWEzMjgzMCIsImlhdCI6MTYzMjM2MDg1NCwiZXhwIjoxNjMyMzY0NDU0fQ.mXnfAgHtvC1TUHZC84xbzN_cVV9n0h2beuzwC_RwtEM
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlJlblNoZXJib3VybmUiLCJpZCI6IjYxNDkyODg0MjhmZjZlMmYxYWEzMjgzMCIsImlhdCI6MTYzMjM2MjA1MywiZXhwIjoxNjMyMzY1NjUzfQ.QAt2lETVTbFwczKZvtLB4KNUVcyM5YqHxq8SDjYfEwA
 
 {
     "title": "Kansas City Cycling",
