@@ -7,9 +7,10 @@ const app = express()
 const mongoose = require('mongoose')
 
 const blogsRouter = require('./controllers/blogs')
+const usersRouter = require('./controllers/users')
+
 const cors = require('cors')
 const middleware = require('./utils/middleware')
-const usersRouter = require('./controllers/users')
 
 mongoose.connect(config.MONGODB_URI)
   .then(() => {
