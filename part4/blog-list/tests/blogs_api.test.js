@@ -4,11 +4,19 @@ const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const User = require('../models/user')
+
+let token = null
 
 beforeEach(async () => {
   await Blog.deleteMany({})
+  await User.deleteMany({})
 
-  const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
+  const userResult = await api.post('/api/users').set('Content-type', 'application/json').send(helper.user).expect(201)
+  const userLogin = await api.post('/api/login').set('Content-type', 'application/json').send(helper.user).expect(200)
+  token = 'bearer ' + userLogin.body.token
+
+  const blogObjects = helper.initialBlogs.map(blog => new Blog({ ...blog, user: userResult.body.id }))
   const promiseArray = blogObjects.map(blog => blog.save())
   await Promise.all(promiseArray)
 })
@@ -49,7 +57,11 @@ describe('POST methods from API', () => {
       likes: 31
     }
 
-    await api.post('/api/blogs').set('Content-type', 'application/json').send(newBlog).expect(201)
+    await api.post('/api/blogs')
+      .set('Content-type', 'application/json')
+      .set('Authorization', token)
+      .send(newBlog)
+      .expect(201)
   
     const blogsAfter = await helper.blogsInDb()
     expect(blogsAfter).toHaveLength(helper.initialBlogs.length + 1)
@@ -65,10 +77,17 @@ describe('POST methods from API', () => {
       likes: 31
     }
 
-    await api.post('/api/blogs').set('Content-type', 'application/json').send(newBlog).expect(400)
+    await api.post('/api/blogs')
+    .set('Content-type', 'application/json')
+    .set('Authorization', token)
+    .send(newBlog)
+    .expect(400)
   
     const blogsAfter = await helper.blogsInDb()
     expect(blogsAfter).toHaveLength(helper.initialBlogs.length)
+
+    const contents = blogsAfter.map(r => r.title)
+    expect(contents).not.toContain(newBlog.title)
   })
 
   test('new blog without url should fail', async () => {
@@ -78,10 +97,34 @@ describe('POST methods from API', () => {
       likes: 31
     }
 
-    await api.post('/api/blogs').set('Content-type', 'application/json').send(newBlog).expect(400)
+    await api.post('/api/blogs')
+      .set('Content-type', 'application/json')
+      .set('Authorization', token)
+      .send(newBlog)
+      .expect(400)
   
     const blogsAfter = await helper.blogsInDb()
     expect(blogsAfter).toHaveLength(helper.initialBlogs.length)
+
+    const contents = blogsAfter.map(r => r.title)
+    expect(contents).not.toContain(newBlog.title)
+  })
+
+  test('adding blog without token should fail', async () => {
+    const newBlog = {
+      title: "Tidying up the Go web experience",
+      author: "Russ Cox",
+      url: "https://go.dev/blog/tidy-web",
+      likes: 31
+    }
+
+    await api.post('/api/blogs').set('Content-type', 'application/json').send(newBlog).expect(401)
+  
+    const blogsAfter = await helper.blogsInDb()
+    expect(blogsAfter).toHaveLength(helper.initialBlogs.length)
+
+    const contents = blogsAfter.map(r => r.title)
+    expect(contents).not.toContain(newBlog.title)
   })
 })
 
@@ -90,7 +133,9 @@ describe('DELETE methods from API', () => {
     const blogsAtStart = await helper.blogsInDb()
     const { id, title } = blogsAtStart[0]
 
-    await api.delete(`/api/blogs/${id}`).expect(204)
+    await api.delete(`/api/blogs/${id}`)
+      .set('Authorization', token)
+      .expect(204)
 
     const blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)

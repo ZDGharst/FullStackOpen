@@ -17,7 +17,7 @@ describe('POST user to API', () => {
       password: 'secret'
     }
 
-    await api.post('/api/users').set('Content-type', 'application/json').send(user).expect(200)
+    await api.post('/api/users').set('Content-type', 'application/json').send(user).expect(201)
   
     const usersAfter = await helper.usersInDb()
     expect(usersAfter).toHaveLength(1)
