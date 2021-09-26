@@ -15,6 +15,7 @@ const LoginForm = ({ setUser }) => {
       setUser(user)
       setUsername('')
       setPassword('')
+      window.localStorage.setItem('loggedBlogUser', JSON.stringify(user))
     } catch (exception) {
       console.log('Wrong credentials')
     }
