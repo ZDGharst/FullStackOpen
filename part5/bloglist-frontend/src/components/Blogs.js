@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Blog from './Blog'
 import BlogForm from './BlogForm'
 import blogService from '../services/blogs'
+import Togglable from './Togglable'
 
 const Blogs = ({ user, setUser, setNotification }) => {
   const [blogs, setBlogs] = useState([])
@@ -20,13 +21,13 @@ const Blogs = ({ user, setUser, setNotification }) => {
 
       const response = await blogService.create(newBlog)
       setBlogs(blogs.concat(response))
+      
       setNotification({message: `Your new blog, ${response.title} by ${response.author} has been added.`, type: 'info' })
       setTimeout(() => {
         setNotification(null)
       }, 5000)
     } catch(error) {
       setNotification({message: error.response.data.error, type: 'error' })
-      console.log(error.response)
       setTimeout(() => {
         setNotification(null)
       }, 5000)
@@ -47,7 +48,9 @@ const Blogs = ({ user, setUser, setNotification }) => {
   return (
     <>
       <p>User {user.name} is logged in <button onClick={logOut}>logout</button></p>
-      <BlogForm addBlog={addBlog} />
+      <Togglable buttonLabel='Add new blog'>
+        <BlogForm addBlog={addBlog} />
+      </Togglable>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />)}
     </>
