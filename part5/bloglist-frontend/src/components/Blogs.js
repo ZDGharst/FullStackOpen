@@ -69,9 +69,15 @@ const Blogs = ({ user, setUser, setNotification }) => {
   }
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
+    const getBlogs = async () => {
+      const blogs = await blogService.getAll()
+      blogs.sort((a, b) => {
+        return a.likes < b.likes
+      })
       setBlogs(blogs)
-    )
+    }
+
+    return getBlogs()
   }, [])
 
   return (
