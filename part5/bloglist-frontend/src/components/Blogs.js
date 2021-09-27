@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './Blog'
 import BlogForm from './BlogForm'
 import blogService from '../services/blogs'
@@ -6,6 +6,7 @@ import Togglable from './Togglable'
 
 const Blogs = ({ user, setUser, setNotification }) => {
   const [blogs, setBlogs] = useState([])
+  const blogFormRef = useRef()
 
   const addBlog = async (input) => {
     blogService.setToken(user.token)
@@ -21,6 +22,7 @@ const Blogs = ({ user, setUser, setNotification }) => {
 
       const response = await blogService.create(newBlog)
       setBlogs(blogs.concat(response))
+      blogFormRef.current.toggleVisibility()
       
       setNotification({message: `Your new blog, ${response.title} by ${response.author} has been added.`, type: 'info' })
       setTimeout(() => {
@@ -48,7 +50,7 @@ const Blogs = ({ user, setUser, setNotification }) => {
   return (
     <>
       <p>User {user.name} is logged in <button onClick={logOut}>logout</button></p>
-      <Togglable buttonLabel='Add new blog'>
+      <Togglable buttonLabel='Add new blog' ref={blogFormRef}>
         <BlogForm addBlog={addBlog} />
       </Togglable>
       {blogs.map(blog =>
