@@ -36,6 +36,33 @@ const Blogs = ({ user, setUser, setNotification }) => {
     }
   }
 
+  const likeBlog = async (input) => {
+    blogService.setToken(user.token)
+
+    try {
+      const newBlog = {
+        title: input.title,
+        author: input.author,
+        url: input.url,
+        user: input.user,
+        likes: input.likes + 1,
+        id: input.id
+      }
+
+      const response = await blogService.like(newBlog)
+      
+      setNotification({message: `Liked the blog, ${response.title} by ${response.author}.`, type: 'info' })
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
+    } catch(error) {
+      setNotification({message: error.response.data.error, type: 'error' })
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
+    }
+  }
+
   const logOut = () => {
     window.localStorage.clear()
     setUser(null)
@@ -54,7 +81,7 @@ const Blogs = ({ user, setUser, setNotification }) => {
         <BlogForm addBlog={addBlog} />
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />)}
+        <Blog key={blog.id} blog={blog} likeBlog={likeBlog} />)}
     </>
   )
 }

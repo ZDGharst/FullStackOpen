@@ -1,7 +1,14 @@
 import React, { useState } from 'react'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, likeBlog }) => {
   const [showDetails, setShowDetails] = useState(false)
+  const [likes, setLikes] = useState(blog.likes)
+
+  const incrementLikes = () => {
+    setLikes(likes + 1)
+    likeBlog({...blog, likes: likes})
+  }
+
   const blogStyle = {
     border: 'solid',
     borderWidth: 1,
@@ -15,7 +22,7 @@ const Blog = ({ blog }) => {
       <div style={blogStyle}>
         {blog.title} <button onClick={() => setShowDetails(false)}>Hide</button><br />
         URL: {blog.url}<br />
-        Likes: {blog.likes} <button>Like</button><br />
+        Likes: {likes} <button onClick={incrementLikes}>Like</button><br />
         Author: {blog.author}
       </div>
     )
