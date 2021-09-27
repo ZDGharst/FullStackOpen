@@ -1,12 +1,16 @@
 import React, { useState } from 'react'
 
-const Blog = ({ blog, likeBlog }) => {
+const Blog = ({ user,  blog, likeBlog, deleteBlog }) => {
   const [showDetails, setShowDetails] = useState(false)
   const [likes, setLikes] = useState(blog.likes)
 
   const incrementLikes = () => {
     setLikes(likes + 1)
     likeBlog({...blog, likes: likes})
+  }
+
+  const deleteButton = () => {
+    return (<button onClick={() => deleteBlog(blog)}>delete blog</button>)
   }
 
   const blogStyle = {
@@ -23,7 +27,9 @@ const Blog = ({ blog, likeBlog }) => {
         {blog.title} <button onClick={() => setShowDetails(false)}>Hide</button><br />
         URL: {blog.url}<br />
         Likes: {likes} <button onClick={incrementLikes}>Like</button><br />
-        Author: {blog.author}
+        Author: {blog.author}<br />
+        User: {blog.user.username}<br />
+        {user.username === blog.user.username ? deleteButton() : null}
       </div>
     )
   }

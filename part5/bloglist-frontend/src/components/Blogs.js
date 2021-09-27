@@ -7,16 +7,14 @@ import Togglable from './Togglable'
 const Blogs = ({ user, setUser, setNotification }) => {
   const [blogs, setBlogs] = useState([])
   const blogFormRef = useRef()
+  blogService.setToken(user.token)
 
   const addBlog = async (input) => {
-    blogService.setToken(user.token)
-
     try {
       const newBlog = {
         title: input.title,
         author: input.author,
         url: input.url,
-        user: user.id,
         likes: 0
       }
 
@@ -37,14 +35,11 @@ const Blogs = ({ user, setUser, setNotification }) => {
   }
 
   const likeBlog = async (input) => {
-    blogService.setToken(user.token)
-
     try {
       const newBlog = {
         title: input.title,
         author: input.author,
         url: input.url,
-        user: input.user,
         likes: input.likes + 1,
         id: input.id
       }
@@ -56,6 +51,30 @@ const Blogs = ({ user, setUser, setNotification }) => {
         setNotification(null)
       }, 5000)
     } catch(error) {
+      setNotification({message: error.response.data.error, type: 'error' })
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
+    }
+  }
+
+  const deleteBlog = async (input) => {
+    try {
+      const result = window.confirm(`Are you sure you'd like to remove the blog ${input.title}? This can't be undone.`)
+      if(!result) {
+        return null
+      }
+      
+      await blogService.remove(input.id)
+
+      setBlogs(blogs.filter(blog => blog.id !== input.id))
+      
+      setNotification({message: `Deleted the blog, ${input.title} by ${input.author}.`, type: 'info' })
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
+    } catch(error) {
+      console.log(error)
       setNotification({message: error.response.data.error, type: 'error' })
       setTimeout(() => {
         setNotification(null)
@@ -80,6 +99,7 @@ const Blogs = ({ user, setUser, setNotification }) => {
     return getBlogs()
   }, [])
 
+
   return (
     <>
       <p>User {user.name} is logged in <button onClick={logOut}>logout</button></p>
@@ -87,7 +107,7 @@ const Blogs = ({ user, setUser, setNotification }) => {
         <BlogForm addBlog={addBlog} />
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} likeBlog={likeBlog} />)}
+        <Blog key={blog.id} user={user} blog={blog} likeBlog={likeBlog} deleteBlog={deleteBlog} />)}
     </>
   )
 }
