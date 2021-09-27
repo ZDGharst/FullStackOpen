@@ -11,11 +11,11 @@ const App = () => {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
     }
-  })
+  }, [])
 
   return (
     user
-      ? <Blogs user={user} setUser={setUser} /> 
+      ? <Blogs user={user} setUser={setUser} />
       : <LoginForm setUser={setUser} />
   )
 }
