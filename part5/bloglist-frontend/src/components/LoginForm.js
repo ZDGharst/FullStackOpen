@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import loginService from '../services/login'
 
-const LoginForm = ({ setUser }) => {
+const LoginForm = ({ setUser, setNotification }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -17,7 +17,10 @@ const LoginForm = ({ setUser }) => {
       setPassword('')
       window.localStorage.setItem('loggedBlogUser', JSON.stringify(user))
     } catch (exception) {
-      console.log('Wrong credentials')
+      setNotification({ message: 'Invalid username or password.', type: 'error' })
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
     }
   }
 
