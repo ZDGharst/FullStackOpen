@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
+
 import Blog from './Blog'
 import BlogForm from './BlogForm'
 import blogService from '../services/blogs'
+import PropTypes from 'prop-types'
 import Togglable from './Togglable'
 
 const Blogs = ({ user, setUser, setNotification }) => {
@@ -66,7 +68,6 @@ const Blogs = ({ user, setUser, setNotification }) => {
       }
       
       await blogService.remove(input.id)
-
       setBlogs(blogs.filter(blog => blog.id !== input.id))
       
       setNotification({message: `Deleted the blog, ${input.title} by ${input.author}.`, type: 'info' })
@@ -110,6 +111,11 @@ const Blogs = ({ user, setUser, setNotification }) => {
         <Blog key={blog.id} user={user} blog={blog} likeBlog={likeBlog} deleteBlog={deleteBlog} />)}
     </>
   )
+}
+
+Blogs.propTypes = {
+  user: PropTypes.object.isRequired,
+  setUser: PropTypes.func.isRequired
 }
 
 export default Blogs

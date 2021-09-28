@@ -35,4 +35,6 @@ const remove = async (id) => {
   return request.data
 }
 
-export default { setToken, getAll, create, like, remove }
+const exports = { setToken, getAll, create, like, remove }
+
+export default exports

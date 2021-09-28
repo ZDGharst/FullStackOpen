@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
+
 import loginService from '../services/login'
+import PropTypes from 'prop-types'
 
 const LoginForm = ({ setUser, setNotification }) => {
   const [username, setUsername] = useState('')
@@ -12,9 +14,11 @@ const LoginForm = ({ setUser, setNotification }) => {
       const user = await loginService.login({
         username, password,
       })
+      
       setUser(user)
       setUsername('')
       setPassword('')
+
       window.localStorage.setItem('loggedBlogUser', JSON.stringify(user))
     } catch (exception) {
       setNotification({ message: 'Invalid username or password.', type: 'error' })
@@ -37,6 +41,10 @@ const LoginForm = ({ setUser, setNotification }) => {
       <button type="submit">login</button>
     </form>
   )
+}
+
+LoginForm.propTypes  = {
+  setUser: PropTypes.func.isRequired
 }
 
 export default LoginForm
