@@ -14,7 +14,7 @@ const LoginForm = ({ setUser, setNotification }) => {
       const user = await loginService.login({
         username, password,
       })
-      
+
       setUser(user)
       setUsername('')
       setPassword('')

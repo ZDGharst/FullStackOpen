@@ -23,13 +23,13 @@ const Blogs = ({ user, setUser, setNotification }) => {
       const response = await blogService.create(newBlog)
       setBlogs(blogs.concat(response))
       blogFormRef.current.toggleVisibility()
-      
-      setNotification({message: `Your new blog, ${response.title} by ${response.author} has been added.`, type: 'info' })
+
+      setNotification({ message: `Your new blog, ${response.title} by ${response.author} has been added.`, type: 'info' })
       setTimeout(() => {
         setNotification(null)
       }, 5000)
     } catch(error) {
-      setNotification({message: error.response.data.error, type: 'error' })
+      setNotification({ message: error.response.data.error, type: 'error' })
       setTimeout(() => {
         setNotification(null)
       }, 5000)
@@ -47,13 +47,13 @@ const Blogs = ({ user, setUser, setNotification }) => {
       }
 
       const response = await blogService.like(newBlog)
-      
-      setNotification({message: `Liked the blog, ${response.title} by ${response.author}.`, type: 'info' })
+
+      setNotification({ message: `Liked the blog, ${response.title} by ${response.author}.`, type: 'info' })
       setTimeout(() => {
         setNotification(null)
       }, 5000)
     } catch(error) {
-      setNotification({message: error.response.data.error, type: 'error' })
+      setNotification({ message: error.response.data.error, type: 'error' })
       setTimeout(() => {
         setNotification(null)
       }, 5000)
@@ -66,17 +66,17 @@ const Blogs = ({ user, setUser, setNotification }) => {
       if(!result) {
         return null
       }
-      
+
       await blogService.remove(input.id)
       setBlogs(blogs.filter(blog => blog.id !== input.id))
-      
-      setNotification({message: `Deleted the blog, ${input.title} by ${input.author}.`, type: 'info' })
+
+      setNotification({ message: `Deleted the blog, ${input.title} by ${input.author}.`, type: 'info' })
       setTimeout(() => {
         setNotification(null)
       }, 5000)
     } catch(error) {
       console.log(error)
-      setNotification({message: error.response.data.error, type: 'error' })
+      setNotification({ message: error.response.data.error, type: 'error' })
       setTimeout(() => {
         setNotification(null)
       }, 5000)

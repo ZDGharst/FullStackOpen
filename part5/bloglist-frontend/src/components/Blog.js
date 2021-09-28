@@ -8,7 +8,7 @@ const Blog = ({ user, blog, likeBlog, deleteBlog }) => {
 
   const incrementLikes = () => {
     setLikes(likes + 1)
-    likeBlog({...blog, likes: likes})
+    likeBlog({ ...blog, likes: likes })
   }
 
   const deleteButton = () => {
@@ -39,7 +39,7 @@ const Blog = ({ user, blog, likeBlog, deleteBlog }) => {
   return(
     <div style={blogStyle}>
       {blog.title} <button onClick={() => setShowDetails(true)}>View</button>
-    </div>  
+    </div>
   )
 }
 
