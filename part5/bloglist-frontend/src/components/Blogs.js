@@ -9,6 +9,7 @@ import Togglable from './Togglable'
 const Blogs = ({ user, setUser, setNotification }) => {
   const [blogs, setBlogs] = useState([])
   const blogFormRef = useRef()
+
   blogService.setToken(user.token)
 
   const addBlog = async (input) => {
