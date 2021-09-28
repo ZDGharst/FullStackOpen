@@ -43,11 +43,7 @@ describe('Blog app', function() {
 
   describe('When logged in...', function() {
     beforeEach(function() {
-      cy.request('POST', 'http://localhost:3003/api/login', user)
-        .then(response => {
-          localStorage.setItem('loggedBlogUser', JSON.stringify(response.body))
-          cy.visit('http://localhost:3000')
-        })
+      cy.login(user)
     })
 
     it('A new blog can be created', function() {
@@ -57,6 +53,19 @@ describe('Blog app', function() {
       cy.get('#url').type(blog.url)
       cy.contains('create').click()
       cy.contains(blog.title)
+    })
+
+    describe('...and a note exists...', function() {
+      beforeEach(function() {
+        cy.createBlog(blog)
+      })
+
+      it('The like button can be pressed', function() {
+        cy.contains('View').click()
+        cy.contains('Like').click()
+        cy.contains('Like').click()
+        cy.contains('Likes: 2')
+      })
     })
   })
 })
