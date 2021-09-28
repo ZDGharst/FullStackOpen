@@ -76,31 +76,47 @@ describe('Blog app', function() {
       cy.contains(blogs[0].title)
     })
 
-    describe('...and a note exists...', function() {
+    describe('...and a blog exists...', function() {
       beforeEach(function() {
         cy.createBlog(blogs[0])
         cy.createBlog(blogs[1])
         cy.createBlog(blogs[2])
       })
 
-      it.only('The like button can be pressed', function() {
+      it('The like button can be pressed', function() {
         cy.contains('View').click()
         cy.contains('Like').click()
-        cy.contains('Like').click()
-        cy.contains('Likes: 2')
+        cy.contains('Likes: 1')
       })
 
-      it.only('The delete button can be pressed', function() {
+      it('The delete button can be pressed', function() {
         cy.contains('View').click()
         cy.contains('delete blog').click()
         cy.get('.infoNotification').should('contain', blogs[0].title)
         cy.get('.blog').should('not.contain', blogs[0].title)
       })
 
-      it.only('The delete button can\'t be pressed by different user', function() {
+      it('The delete button can\'t be pressed by different user', function() {
         cy.login(users[1])
         cy.contains('View').click()
         cy.get('.blog').should('not.contain', 'delete blog')
+      })
+
+      it.only('Sort by likes', function() {
+        cy.contains(blogs[2].title)
+          .contains('View').click()
+        cy.contains(blogs[2].title)
+          .parent()
+          .find('button')
+          .contains('Like')
+          .as('likeButton')
+        cy.get('@likeButton').click()
+        cy.wait(100)
+        cy.get('@likeButton').click()
+        cy.contains('Likes: 2')
+        cy.visit('http://localhost:3000')
+        cy.contains('View').click()
+        cy.contains('Likes: 2')
       })
     })
   })

@@ -93,7 +93,7 @@ const Blogs = ({ user, setUser, setNotification }) => {
     const getBlogs = async () => {
       const blogs = await blogService.getAll()
       blogs.sort((a, b) => {
-        return a.likes < b.likes
+        return a.likes < b.likes ? 1 : -1
       })
       setBlogs(blogs)
     }
