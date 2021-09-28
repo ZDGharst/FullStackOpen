@@ -1,20 +1,41 @@
-const user = {
-  name: 'Zach Gharst',
-  username: 'ZDGharst',
-  password: 'secret'
-}
+const users = [
+  {
+    name: 'Zach Gharst',
+    username: 'ZDGharst',
+    password: 'secret'
+  },
+  {
+    name: 'Lindsay Gharst',
+    username: 'LGGharst',
+    password: 'confidential'
+  }
+]
 
-const blog = {
-  title: 'Component testing is done with react-testing-library',
-  author: 'Zach Gharst',
-  url: 'http://github.com'
-}
+const blogs = [
+  {
+    title: 'Component testing is done with react-testing-library',
+    author: 'Zach Gharst',
+    url: 'http://github.com'
+  },
+  {
+    title: 'Go To Statement Considered Harmful',
+    author: 'Edsger W. Dijkstra',
+    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+  },
+  {
+    title: 'Canonical string reduction',
+    author: 'Edsger W. Dijkstra',
+    url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+  }
+]
 
 describe('Blog app', function() {
   beforeEach(function() {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
 
-    cy.request('POST', 'http://localhost:3003/api/users', user)
+    cy.request('POST', 'http://localhost:3003/api/users', users[0])
+    cy.request('POST', 'http://localhost:3003/api/users', users[1])
+
     cy.visit('http://localhost:3000')
   })
 
@@ -24,47 +45,62 @@ describe('Blog app', function() {
   })
 
   it('Succeeds with correct credentials', function() {
-    cy.get('#username').type(user.username)
-    cy.get('#password').type(user.password)
+    cy.get('#username').type(users[0].username)
+    cy.get('#password').type(users[0].password)
     cy.get('#login-button').click()
 
     cy.contains('User Zach Gharst is logged in')
   })
 
   it('Fails with wrong credentials', function() {
-    cy.get('#username').type(user.username)
+    cy.get('#username').type(users[0].username)
     cy.get('#password').type('sekreet')
     cy.get('#login-button').click()
 
     cy.contains('Invalid username or password.')
       .and('have.css', 'color', 'rgb(255, 0, 0)')
-    cy.get('html').should('not.contain', `User ${user.name} is logged in`)
+    cy.get('html').should('not.contain', `User ${users[0].name} is logged in`)
   })
 
   describe('When logged in...', function() {
     beforeEach(function() {
-      cy.login(user)
+      cy.login(users[0])
     })
 
     it('A new blog can be created', function() {
       cy.contains('Add new blog').click()
-      cy.get('#title').type(blog.title)
-      cy.get('#author').type(blog.author)
-      cy.get('#url').type(blog.url)
+      cy.get('#title').type(blogs[0].title)
+      cy.get('#author').type(blogs[0].author)
+      cy.get('#url').type(blogs[0].url)
       cy.contains('create').click()
-      cy.contains(blog.title)
+      cy.contains(blogs[0].title)
     })
 
     describe('...and a note exists...', function() {
       beforeEach(function() {
-        cy.createBlog(blog)
+        cy.createBlog(blogs[0])
+        cy.createBlog(blogs[1])
+        cy.createBlog(blogs[2])
       })
 
-      it('The like button can be pressed', function() {
+      it.only('The like button can be pressed', function() {
         cy.contains('View').click()
         cy.contains('Like').click()
         cy.contains('Like').click()
         cy.contains('Likes: 2')
+      })
+
+      it.only('The delete button can be pressed', function() {
+        cy.contains('View').click()
+        cy.contains('delete blog').click()
+        cy.get('.infoNotification').should('contain', blogs[0].title)
+        cy.get('.blog').should('not.contain', blogs[0].title)
+      })
+
+      it.only('The delete button can\'t be pressed by different user', function() {
+        cy.login(users[1])
+        cy.contains('View').click()
+        cy.get('.blog').should('not.contain', 'delete blog')
       })
     })
   })
