@@ -19,8 +19,8 @@ describe('<Blog />', () => {
     user: user
   }
 
-  const likeBlog = () => {}
-  const deleteBlog = () => {}
+  const likeBlog = jest.fn()
+  const deleteBlog = jest.fn()
 
   beforeEach(() => {
     component = render(
@@ -43,5 +43,15 @@ describe('<Blog />', () => {
     expect(component.container).toHaveTextContent('Zach Gharst')
     expect(component.container).toHaveTextContent('http://github.com')
     expect(component.container).toHaveTextContent('5')
+  })
+
+  test('If the like button is clicked twice, the handler should be called twice.', () => {
+    const showDetailsButton = component.getByText('View')
+    fireEvent.click(showDetailsButton)
+
+    const likeButton = component.getByText('Like')
+    fireEvent.click(likeButton)
+    fireEvent.click(likeButton)
+    expect(likeBlog.mock.calls).toHaveLength(2)
   })
 })
