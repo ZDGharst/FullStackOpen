@@ -4,6 +4,7 @@ import { create, increment } from './reducers/anecdoteReducer'
 
 const App = () => {
   const anecdotes = useSelector(state => state)
+    .sort((a, b) => a.votes < b.votes ? 1 : -1)
   const dispatch = useDispatch()
 
   const add = (event) => {
@@ -12,7 +13,7 @@ const App = () => {
     event.target.content.value = ''
   }
 
-  const vote = (id) =>  dispatch(increment(id))
+  const vote = (id) => dispatch(increment(id))
 
   return (
     <div>
