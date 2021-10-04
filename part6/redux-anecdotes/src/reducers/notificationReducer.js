@@ -12,17 +12,16 @@ const reducer = (state = null, action) => {
   }
 }
 
-export const create = (content) => {
+export const updateNotification = (content) => {
   return {
     type: 'UPDATE',
-    data: 'asObject(content)'
+    data: content
   }
 }
 
-export const reset = (id) => {
+export const resetNotification = () => {
   return {
-    type: 'RESET',
-    data: null
+    type: 'RESET'
   }
 }
 
