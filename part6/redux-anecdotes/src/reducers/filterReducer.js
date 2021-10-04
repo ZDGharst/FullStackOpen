@@ -8,7 +8,7 @@ const reducer = (state = '', action) => {
 }
 
 export const updateFilter = (filter) => {
-  return {
+  return  {
     type: 'FILTER/UPDATE',
     filter
   }

@@ -9,10 +9,16 @@ const reducer = (state = null, action) => {
   }
 }
 
-export const updateNotification = (content) => {
-  return {
-    type: 'NOTIFICATION/UPDATE',
-    data: content
+export const updateNotification = (content, timer) => {
+  return async dispatch => {    
+    dispatch({
+      type: 'NOTIFICATION/UPDATE',
+      data: content
+    })
+    
+    setTimeout(() => {
+      dispatch(resetNotification())
+    }, timer * 1000)
   }
 }
 
