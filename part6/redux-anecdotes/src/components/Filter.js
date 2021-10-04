@@ -15,7 +15,7 @@ const Filter = () => {
 
   return (
     <>
-      <label for='filter'>Filter</label>
+      <label htmlFor='filter'>Filter</label>
       <input id='filter' name='filter' style={style} onChange={handleChange} />
     </>
   )
