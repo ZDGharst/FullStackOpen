@@ -3,9 +3,9 @@ const reducer = (state = null, action) => {
   console.log('action', action)
 
   switch(action.type) {
-    case 'UPDATE':
+    case 'NOTIFICATION/UPDATE':
       return action.data
-    case 'RESET':
+    case 'NOTIFICATION/RESET':
       return null
     default:
       return state
@@ -14,14 +14,14 @@ const reducer = (state = null, action) => {
 
 export const updateNotification = (content) => {
   return {
-    type: 'UPDATE',
+    type: 'NOTIFICATION/UPDATE',
     data: content
   }
 }
 
 export const resetNotification = () => {
   return {
-    type: 'RESET'
+    type: 'NOTIFICATION/RESET'
   }
 }
 

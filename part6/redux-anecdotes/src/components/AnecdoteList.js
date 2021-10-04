@@ -4,8 +4,14 @@ import { increment } from '../reducers/anecdoteReducer'
 import { updateNotification, resetNotification } from '../reducers/notificationReducer'
 
 const AnecdoteList = () => {
-  const anecdotes = useSelector(state => state.anecdotes)
-    .sort((a, b) => a.votes < b.votes ? 1 : -1)
+  const anecdotes = useSelector(({ anecdotes, filter }) => {
+    return anecdotes
+      .filter(
+        anecdote => anecdote.content.toLowerCase().indexOf(filter.toLowerCase()) > -1
+      )
+      .sort((a, b) => a.votes < b.votes ? 1 : -1)
+  })
+
   const dispatch = useDispatch()
   const vote = (anecdote) => { 
     dispatch(increment(anecdote.id))
@@ -17,7 +23,6 @@ const AnecdoteList = () => {
 
   return (
     <>
-      <h2>Anecdotes</h2>
       {anecdotes.map(anecdote =>
         <div key={anecdote.id}>
           <div>
