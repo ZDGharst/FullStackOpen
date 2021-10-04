@@ -1,3 +1,5 @@
+let timeout
+
 const reducer = (state = null, action) => {
   switch(action.type) {
     case 'NOTIFICATION/UPDATE':
@@ -10,13 +12,14 @@ const reducer = (state = null, action) => {
 }
 
 export const updateNotification = (content, timer) => {
-  return async dispatch => {    
+  return async dispatch => {
     dispatch({
       type: 'NOTIFICATION/UPDATE',
       data: content
     })
     
-    setTimeout(() => {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
       dispatch(resetNotification())
     }, timer * 1000)
   }
