@@ -39,7 +39,7 @@ export const voteAnecdote = (anecdote) => {
     const updatedAnecdote = await anecdoteService.vote(anecdote)
     dispatch({
       type: 'ANECDOTE/VOTE',
-      data: updatedAnecdote.data
+      data: updatedAnecdote
     })
   }
 }

@@ -8,16 +8,26 @@ const getAll = async () => {
 }
 
 const create = async (content) => {
-  const newObject = { content, votes: 0 }
-  const response = await axios.post(baseUrl, newObject)
+  const newAnecdote = {
+    content,
+    votes: 0
+  }
+  
+  const response = await axios.post(baseUrl, newAnecdote)
   return response.data
 }
 
 const vote = async (id) => {
-  const resource = `${baseUrl}/${id}`
-  const anecdote = await axios.get(resource)
-  const voteForAnecdote = { ...anecdote.data, votes: anecdote.data.votes + 1 }
-  return await axios.put(resource, voteForAnecdote)
+  const url = `${baseUrl}/${id}`
+  const anecdote = await axios.get(url)
+
+  const voteForAnecdote = {
+    ...anecdote.data,
+    votes: anecdote.data.votes + 1
+  }
+
+  const response = await axios.put(url, voteForAnecdote)
+  return response.data
 }
 
 const exports = { getAll, create, vote }
