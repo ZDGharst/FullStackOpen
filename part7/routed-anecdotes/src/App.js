@@ -71,7 +71,13 @@ const CreateNew = (props) => {
       votes: 0
     })
     history.push('/')
+  }
 
+  const resetAll = (e) => {
+    e.preventDefault()
+    content.reset()
+    author.reset()
+    info.reset()
   }
 
   return (
@@ -90,7 +96,7 @@ const CreateNew = (props) => {
           url for more info
           <input name='info' {...info} />
         </div>
-        <button>create</button>
+        <button>create</button><button onClick={resetAll}>reset</button>
       </form>
     </div>
   )
