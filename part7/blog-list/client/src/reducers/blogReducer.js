@@ -2,14 +2,20 @@ import blogService from '../services/blogs'
 import { updateNotification } from './notificationReducer'
 
 const reducer = (state = [], action) => {
-  const id = 5 // action.data.id ? action.data.id : null
+
   switch(action.type) {
   case 'BLOG/INITIALIZE':
     return action.data
   case 'BLOG/ADD':
     return state.concat(action.data)
-  case 'BLOG/VOTE':
-    return state.map(anecdote => anecdote.id !== id ? anecdote : action.data)
+  case 'BLOG/LIKE': {
+    const id = action.data.id
+    return state.map(blog => blog.id !== id ? blog : { ...blog, likes: blog.likes + 1 })
+  }
+  case 'BLOG/DELETE': {
+    const id = action.data
+    return state.filter(blog => blog.id !== id ? blog : null )
+  }
   default:
     return state
   }
@@ -77,14 +83,68 @@ export const createBlog = (blog) => {
   }
 }
 
-// export const voteAnecdote = (anecdote) => {
-//   return async dispatch => {
-//     const updatedAnecdote = await anecdoteService.vote(anecdote)
-//     dispatch({
-//       type: 'ANECDOTE/VOTE',
-//       data: updatedAnecdote
-//     })
-//   }
-// }
+export const likeBlog = (blog) => {
+  return async dispatch => {
+    try {
+      const updatedBlog = await blogService.like(blog)
+
+      dispatch({
+        type: 'BLOG/LIKE',
+        data: updatedBlog
+      })
+
+      dispatch(updateNotification(
+        `You have liked ${updatedBlog.title}.`, 'info'
+      ))
+    } catch(error) {
+      let notif
+
+      if(error.response) {
+        notif = error.response.data.error ? error.response.data.error : error.message
+      } else if (error.request) {
+        notif = 'Request failed.'
+      } else {
+        notif = 'Unknown error.'
+      }
+
+      dispatch(updateNotification(
+        notif, 'error'
+      ))
+    }
+
+  }
+}
+
+export const deleteBlog = (blog) => {
+  return async dispatch => {
+    try {
+      await blogService.remove(blog.id)
+
+      dispatch({
+        type: 'BLOG/DELETE',
+        data: blog.id
+      })
+
+      dispatch(updateNotification(
+        `You have deleted ${blog.title}.`, 'info'
+      ))
+    } catch(error) {
+      let notif
+
+      if(error.response) {
+        notif = error.response.data.error ? error.response.data.error : error.message
+      } else if (error.request) {
+        notif = 'Request failed.'
+      } else {
+        notif = 'Unknown error.'
+      }
+
+      dispatch(updateNotification(
+        notif, 'error'
+      ))
+    }
+
+  }
+}
 
 export default reducer
