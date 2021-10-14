@@ -111,7 +111,6 @@ export const likeBlog = (blog) => {
         notif, 'error'
       ))
     }
-
   }
 }
 

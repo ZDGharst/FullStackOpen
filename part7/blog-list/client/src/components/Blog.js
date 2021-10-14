@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-
-import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { deleteBlog, likeBlog } from '../reducers/blogReducer'
 
-const Blog = ({ user, blog }) => {
+const Blog = ({ id }) => {
+  const blog = useSelector(state => state.blogs.find(blog => blog.id === id))
+  const user = useSelector(state => state.user)
   const [showDetails, setShowDetails] = useState(false)
   const dispatch = useDispatch()
 
@@ -39,17 +39,10 @@ const Blog = ({ user, blog }) => {
   }
 
   return(
-    <div className='blog'  style={blogStyle}>
+    <div className='blog' style={blogStyle}>
       {blog.title} <button onClick={() => setShowDetails(true)}>View</button>
     </div>
   )
-}
-
-Blog.propTypes = {
-  user: PropTypes.object.isRequired,
-  blog: PropTypes.object.isRequired,
-  likeBlog: PropTypes.func.isRequired,
-  deleteBlog: PropTypes.func.isRequired
 }
 
 export default Blog
