@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Blog from './Blog'
 import BlogForm from './BlogForm'
@@ -7,31 +7,25 @@ import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
 import Togglable from './Togglable'
 import { updateNotification } from '../reducers/notificationReducer'
+import { createBlog, initializeBlogs } from '../reducers/blogReducer'
 
 const Blogs = ({ user, setUser }) => {
-  const [blogs, setBlogs] = useState([])
+  const blogs = useSelector(state => state.blogs)
   const blogFormRef = useRef()
   const dispatch = useDispatch()
 
   blogService.setToken(user.token)
 
   const addBlog = async (input) => {
-    try {
-      const newBlog = {
-        title: input.title,
-        author: input.author,
-        url: input.url,
-        likes: 0
-      }
-
-      const response = await blogService.create(newBlog)
-      setBlogs(blogs.concat(response))
-      blogFormRef.current.toggleVisibility()
-
-      dispatch(updateNotification(`Your new blog, ${response.title} by ${response.author} has been added.`, 'info'))
-    } catch(error) {
-      dispatch(updateNotification( error.response.data.error, 'error' ))
+    const newBlog = {
+      title: input.title,
+      author: input.author,
+      url: input.url,
+      likes: 0
     }
+
+    dispatch(createBlog(newBlog))
+    blogFormRef.current.toggleVisibility()
   }
 
   const likeBlog = async (input) => {
@@ -60,7 +54,7 @@ const Blogs = ({ user, setUser }) => {
       }
 
       await blogService.remove(input.id)
-      setBlogs(blogs.filter(blog => blog.id !== input.id))
+      // setBlogs(blogs.filter(blog => blog.id !== input.id))
 
       dispatch(updateNotification(`Deleted the blog, ${input.title} by ${input.author}.`, 'info'))
     } catch(error) {
@@ -74,15 +68,7 @@ const Blogs = ({ user, setUser }) => {
   }
 
   useEffect(() => {
-    const getBlogs = async () => {
-      const blogs = await blogService.getAll()
-      blogs.sort((a, b) => {
-        return a.likes < b.likes ? 1 : -1
-      })
-      setBlogs(blogs)
-    }
-
-    return getBlogs()
+    dispatch(initializeBlogs())
   }, [])
 
 
