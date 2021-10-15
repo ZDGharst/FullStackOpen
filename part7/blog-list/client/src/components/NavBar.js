@@ -1,23 +1,21 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
+import { Navbar, Nav } from 'react-bootstrap'
 
 import { logout } from '../reducers/userReducer'
 
 const NavBar = () => {
   const dispatch = useDispatch()
-  const user = useSelector(state => state.user)
-
-  const style = {
-    background: '#CCC',
-    margin: 0,
-    padding: 10
-  }
 
   return (
-    <div style={style}>
-      <Link to='/'>Blogs</Link> <Link to='/users'>Users</Link> Logged in as {user.username} <button onClick={() => dispatch(logout())}>logout</button>
-    </div>
+    <Navbar bg="light" expand="lg">
+      <Navbar.Brand>Blog List</Navbar.Brand>
+      <Nav.Link as={Link} to="/">Blogs</Nav.Link>
+      <Nav.Link as={Link} to="/create">Create</Nav.Link>
+      <Nav.Link as={Link} to="/users">Users</Nav.Link>
+      <Nav.Link as={Link} to="/" onClick={() => dispatch(logout())}>Logout</Nav.Link>
+    </Navbar>
   )
 }
 

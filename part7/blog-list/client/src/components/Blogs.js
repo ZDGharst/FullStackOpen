@@ -1,25 +1,30 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-
-import BlogForm from './BlogForm'
-import Togglable from './Togglable'
+import { Table } from 'react-bootstrap'
 
 const Blogs = () => {
   const blogs = useSelector(state => state.blogs)
-  const blogFormRef = useRef()
-
-
 
   return (
-    <>
-      <Togglable buttonLabel='Add new blog' ref={blogFormRef}>
-        <BlogForm blogFormRef={blogFormRef} />
-      </Togglable>
-      {blogs.map(blog =>
-        <p key={blog.id}><Link to={`blogs/${blog.id}`}>{blog.title}</Link></p>
-      )}
-    </>
+    <Table striped hover>
+      <thead>
+        <tr>
+          <th>Blog</th>
+          <th className='text-right'>Likes</th>
+          <th className='text-right'>Comments</th>
+        </tr>
+      </thead>
+      <tbody>
+        {blogs.map(blog =>
+          <tr key={blog.id}>
+            <td><Link to={`blogs/${blog.id}`}>{blog.title}</Link></td>
+            <td className='text-right'>{blog.likes}</td>
+            <td className='text-right'>{blog.comments.length}</td>
+          </tr>
+        )}
+      </tbody>
+    </Table>
   )
 }
 

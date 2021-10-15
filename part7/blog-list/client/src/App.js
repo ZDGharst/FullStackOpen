@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Blog from './components/Blog'
+import BlogForm from './components/BlogForm'
 import Blogs from './components/Blogs'
 import LoginForm from './components/LoginForm'
 import NavBar from './components/NavBar'
@@ -34,7 +35,7 @@ const App = () => {
   if(!user) {
     return (
       <div style={style}>
-        <h1>Blogs</h1>
+        <h1>Login</h1>
         <LoginForm />
       </div>
     )
@@ -43,11 +44,8 @@ const App = () => {
   return (
     <Router>
       <NavBar />
-      <Notification />
 
       <div style={style}>
-        <h1>Blogs</h1>
-
         <Switch>
           <Route path="/users/:id">
             <User />
@@ -58,12 +56,18 @@ const App = () => {
           <Route path="/blogs/:id">
             <Blog />
           </Route>
+          <Route path="/create">
+            <BlogForm />
+          </Route>
           <Route path="/">
             <Blogs />
           </Route>
         </Switch>
       </div>
+
+      <Notification />
     </Router>
+
   )
 }
 
