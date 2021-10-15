@@ -12,7 +12,7 @@ const NavBar = () => {
     <Navbar bg="light" expand="lg">
       <Navbar.Brand>Blog List</Navbar.Brand>
       <Nav.Link as={Link} to="/">Blogs</Nav.Link>
-      <Nav.Link as={Link} to="/create">Create</Nav.Link>
+      <Nav.Link as={Link} to="/create">New</Nav.Link>
       <Nav.Link as={Link} to="/users">Users</Nav.Link>
       <Nav.Link as={Link} to="/" onClick={() => dispatch(logout())}>Logout</Nav.Link>
     </Navbar>

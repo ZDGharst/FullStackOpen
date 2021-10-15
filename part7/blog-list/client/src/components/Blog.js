@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
+import { Button, Form, Table } from 'react-bootstrap'
 
 import { deleteBlog, likeBlog } from '../reducers/blogReducer'
 import blogService from '../services/blogs'
+import { Link } from 'react-router-dom'
 
 const Blog = () => {
   const id = useParams().id
@@ -30,9 +32,11 @@ const Blog = () => {
 
   const addComment = async (e) => {
     e.preventDefault()
+    console.log('hi')
 
     const postComment = await blogService.postComment(id, { content: newComment })
     setComments(comments.concat(postComment))
+    setNewComment('')
   }
 
   const incrementLikes = () => {
@@ -40,27 +44,59 @@ const Blog = () => {
   }
 
   const deleteButton = () => {
-    return (<button onClick={() => dispatch(deleteBlog(blog))}>delete blog</button>)
+    return (<Button variant='danger' onClick={() => dispatch(deleteBlog(blog))}>Delete</Button>)
   }
 
   return (
     <div>
-      <h2>{blog.title}</h2>
-      <p>URL: {blog.url}</p>
-      <p>Likes: {blog.likes} <button onClick={incrementLikes}>Like</button></p>
-      <p>Author: {blog.author}</p>
-      <p>User: {blog.user.username}</p>
+      <Table hover>
+        <thead>
+          <tr>
+            <th colSpan='2'>{blog.title}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Link</td>
+            <td><a href={blog.url}>{blog.url}</a></td>
+          </tr>
+          <tr>
+            <td>Likes</td>
+            <td>{blog.likes}</td>
+          </tr>
+          <tr>
+            <td>Blog Author</td>
+            <td>{blog.author}</td>
+          </tr>
+          <tr>
+            <td>Posted by</td>
+            <td><Link to={`/users/${blog.user.id}`}>{blog.user.username}</Link></td>
+          </tr>
+        </tbody>
+      </Table>
+      <p></p>
+      <Button onClick={incrementLikes}>Like</Button> { ' ' }
       {user.username === blog.user.username ? deleteButton() : null}
 
-      <h3>Comments</h3>
-      <form onSubmit={addComment}>
-        <input value={newComment} onChange={(e) => setNewComment(e.target.value)} />
-        <button>Add comment</button>
-      </form>
+      <hr />
+
+      <h3>Comments:</h3>
 
       {comments.length > 0
-        ? <ul>{comments.map(comment => <li key={comment.id}>{comment.content}</li>)}</ul>
+        ? comments.map(comment => <p style={{ marginTop: 10 }} key={comment.id}>{comment.content}</p>)
         : <p>No comments yet.</p>}
+
+      <Form onSubmit={addComment}>
+        <Form.Group>
+          <Form.Control
+            name="comment"
+            onChange={({ target }) => setNewComment(target.value)}
+            as="textarea"
+            value={newComment}
+          />
+        </Form.Group>
+        <Button as='button'>Add comment</Button>
+      </Form>
     </div>
 
   )

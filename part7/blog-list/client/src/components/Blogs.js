@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { Table } from 'react-bootstrap'
 
 const Blogs = () => {
-  const blogs = useSelector(state => state.blogs)
+  const blogs = useSelector(state => state.blogs.sort((a, b) => b.likes - a.likes))
 
   return (
     <Table striped hover>

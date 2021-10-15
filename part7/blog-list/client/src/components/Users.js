@@ -23,7 +23,7 @@ const Users = () => {
         <thead>
           <tr>
             <th>User</th>
-            <th>Blogs Created</th>
+            <th className='text-right'>Blogs Added</th>
           </tr>
         </thead>
         <tbody>
@@ -32,7 +32,7 @@ const Users = () => {
               <td>
                 <Link to={`users/${user.id}`}>{user.username}</Link>
               </td>
-              <td>{user.blogs.length}</td>
+              <td className='text-right'>{user.blogs.length}</td>
             </tr>
           ))}
         </tbody>
