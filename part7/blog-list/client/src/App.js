@@ -27,37 +27,42 @@ const App = () => {
     dispatch(initializeBlogs())
   }, [])
 
+  const style = {
+    margin: 10
+  }
+
   if(!user) {
     return (
-      <>
+      <div style={style}>
         <h1>Blogs</h1>
         <LoginForm />
-      </>
+      </div>
     )
   }
 
   return (
     <Router>
-      <h1>Blogs</h1>
-      <Notification />
       <NavBar />
+      <Notification />
 
-      <Switch>
-        <Route path="/users/:id">
-          <User />
-        </Route>
-        <Route path="/users">
-          <Users />
-        </Route>
-        <Route path="/blogs/:id">
-          <Blog />
-        </Route>
-        <Route path="/">
-          <Blogs />
-        </Route>
-      </Switch>
+      <div style={style}>
+        <h1>Blogs</h1>
 
-
+        <Switch>
+          <Route path="/users/:id">
+            <User />
+          </Route>
+          <Route path="/users">
+            <Users />
+          </Route>
+          <Route path="/blogs/:id">
+            <Blog />
+          </Route>
+          <Route path="/">
+            <Blogs />
+          </Route>
+        </Switch>
+      </div>
     </Router>
   )
 }
