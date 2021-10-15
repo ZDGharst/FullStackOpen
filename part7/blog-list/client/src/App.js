@@ -6,6 +6,7 @@ import Blogs from './components/Blogs'
 import LoginForm from './components/LoginForm'
 import NavBar from './components/NavBar'
 import Notification from './components/Notification'
+import User from './components/User'
 import Users from './components/Users'
 import { restore } from './reducers/userReducer'
 
@@ -37,6 +38,9 @@ const App = () => {
       <NavBar />
 
       <Switch>
+        <Route path="/users/:id">
+          <User />
+        </Route>
         <Route path="/users">
           <Users />
         </Route>
