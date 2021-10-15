@@ -13,6 +13,7 @@ const Blog = () => {
   const dispatch = useDispatch()
 
   const [comments, setComments] = useState([])
+  const [newComment, setNewComment] = useState('')
 
   useEffect(() => {
     const getAllComments = async () => {
@@ -25,6 +26,13 @@ const Blog = () => {
 
   if(!blog) {
     return null
+  }
+
+  const addComment = async (e) => {
+    e.preventDefault()
+
+    const postComment = await blogService.postComment(id, { content: newComment })
+    setComments(comments.concat(postComment))
   }
 
   const incrementLikes = () => {
@@ -45,6 +53,11 @@ const Blog = () => {
       {user.username === blog.user.username ? deleteButton() : null}
 
       <h3>Comments</h3>
+      <form onSubmit={addComment}>
+        <input value={newComment} onChange={(e) => setNewComment(e.target.value)} />
+        <button>Add comment</button>
+      </form>
+
       {comments.length > 0
         ? <ul>{comments.map(comment => <li key={comment.id}>{comment.content}</li>)}</ul>
         : <p>No comments yet.</p>}
