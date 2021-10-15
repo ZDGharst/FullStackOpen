@@ -102,7 +102,7 @@ describe('Blog app', function() {
         cy.get('.blog').should('not.contain', 'delete blog')
       })
 
-      it.only('Sort by likes', function() {
+      it('Sort by likes', function() {
         cy.contains(blogs[2].title)
           .contains('View').click()
         cy.contains(blogs[2].title)
