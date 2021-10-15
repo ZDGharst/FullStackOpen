@@ -1,12 +1,18 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useParams } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { deleteBlog, likeBlog } from '../reducers/blogReducer'
 
-const Blog = ({ id }) => {
+const Blog = () => {
+  const id = useParams().id
   const blog = useSelector(state => state.blogs.find(blog => blog.id === id))
   const user = useSelector(state => state.user)
-  const [showDetails, setShowDetails] = useState(false)
+
+  if(!blog) {
+    return null
+  }
+
   const dispatch = useDispatch()
 
   const incrementLikes = () => {
@@ -25,22 +31,14 @@ const Blog = ({ id }) => {
     width: 500
   }
 
-  if(showDetails) {
-    return (
-      <div style={blogStyle}>
-        {blog.title} <button onClick={() => setShowDetails(false)}>Hide</button><br />
-        URL: {blog.url}<br />
-        Likes: {blog.likes} <button onClick={incrementLikes}>Like</button><br />
-        Author: {blog.author}<br />
-        User: {blog.user.username}<br />
-        {user.username === blog.user.username ? deleteButton() : null}
-      </div>
-    )
-  }
-
-  return(
-    <div className='blog' style={blogStyle}>
-      {blog.title} <button onClick={() => setShowDetails(true)}>View</button>
+  return (
+    <div style={blogStyle}>
+      {blog.title}<br />
+      URL: {blog.url}<br />
+      Likes: {blog.likes} <button onClick={incrementLikes}>Like</button><br />
+      Author: {blog.author}<br />
+      User: {blog.user.username}<br />
+      {user.username === blog.user.username ? deleteButton() : null}
     </div>
   )
 }
