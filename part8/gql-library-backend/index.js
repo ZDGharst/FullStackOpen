@@ -17,11 +17,11 @@ let authors = [
     born: 1821
   },
   { 
-    name: 'Joshua Kerievsky', // birthyear not known
+    name: 'Joshua Kerievsky',
     id: "afa5b6f2-344d-11e9-a414-719c6709cf3e",
   },
   { 
-    name: 'Sandi Metz', // birthyear not known
+    name: 'Sandi Metz',
     id: "afa5b6f3-344d-11e9-a414-719c6709cf3e",
   },
 ]
@@ -87,18 +87,31 @@ const typeDefs = gql`
     id: ID!
   }
 
-  type Query {
-    allBooks: [Book!]!
+  type Author {
+    name: String!
+    born: Int
     bookCount: Int!
+    id: ID!
+  }
+
+  type Query {
+    bookCount: Int!
+    allBooks: [Book!]!
     authorCount: Int!
+    allAuthors: [Author!]!
   }
 `
 
 const resolvers = {
   Query: {
-    allBooks: () => books,
     bookCount: () => books.length,
-    authorCount: () => authors.length
+    allBooks: () => books,
+    authorCount: () => authors.length,
+    allAuthors: (root) => authors
+  },
+
+  Author: {
+    bookCount: (root) => books.filter(book => book.author === root.name).length
   }
 }
 
