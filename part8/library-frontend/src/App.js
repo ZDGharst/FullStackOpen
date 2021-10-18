@@ -13,6 +13,11 @@ const ALL_AUTHORS = gql`
       born
       bookCount
     }
+    allBooks {
+      title
+      author
+      published
+    }
   }
 `
 
@@ -38,6 +43,7 @@ const App = () => {
       />
 
       <Books
+        books={queryResult.data.allBooks}
         show={page === 'books'}
       />
 
