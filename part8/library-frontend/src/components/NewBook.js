@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { gql, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { AUTHORS_AND_BOOKS, CREATE_BOOK } from '../queries'
 
 const NewBook = ({ show }) => {
