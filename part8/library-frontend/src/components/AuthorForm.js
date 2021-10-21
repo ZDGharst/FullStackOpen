@@ -20,7 +20,7 @@ const AuthorForm = ({ authors }) => {
       setAuthor('')
       setYearBorn('')
     } else {
-
+      alert('Author not found.')
     }
   }
 
