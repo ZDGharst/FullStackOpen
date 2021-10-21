@@ -2,7 +2,7 @@
 import React from 'react'
 import AuthorForm from './AuthorForm'
 
-const Authors = ({ authors }) => (
+const Authors = ({ authors, token }) => (
   <div>
     <h2>authors</h2>
     <table>
@@ -26,7 +26,7 @@ const Authors = ({ authors }) => (
       </tbody>
     </table>
 
-    <AuthorForm authors={authors} />
+    {token && <AuthorForm authors={authors} />}
 
   </div>
 )
