@@ -26,8 +26,14 @@ const AuthorForm = ({ authors }) => {
 
   return (
     <form onSubmit={handleAuthorUpdate}>
-      <p><label htmlFor='author'>Author</label><br /><input name='author' value={author} onChange={(event) => setAuthor(event.target.value)} /></p>
-      <p><label htmlFor='phoneNumber'>Phone Number</label><br /><input name='phoneNumber' value={yearBorn} onChange={(event) => setYearBorn(event.target.value)} /></p>
+      <p>
+        <label htmlFor='author'>Author</label>
+        <br />
+        <select value={author} onChange={(event) => setAuthor(event.target.value)}>
+          {authors.map(a => <option value={a.name}>{a.name}</option>)}
+        </select>
+      </p>
+      <p><label htmlFor='bornOn'>Year of Birth</label><br /><input name='bornOn' value={yearBorn} onChange={(event) => setYearBorn(event.target.value)} /></p>
       <p><button>Update author</button></p>
     </form>
   )
