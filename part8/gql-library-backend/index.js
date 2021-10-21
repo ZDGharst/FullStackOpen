@@ -1,5 +1,19 @@
-const { ApolloServer, gql } = require('apollo-server')
-const { v1: uuid } = require('uuid')
+const { ApolloServer, UserInputError, gql } = require('apollo-server')
+const mongoose = require('mongoose')
+const config = require('./utils/config')
+
+const Author = require('./models/Author')
+const Book = require('./models/Book')
+
+console.log('Connecting to MongoDB...')
+
+mongoose.connect(config.MONGODB_URI)
+  .then(() => {
+  console.log('Connected to MongoDB.')
+  })
+  .catch((error) => {
+    console.log('Error connecting to MongoDB: ', error.meessage)
+  })
 
 let authors = [
   {
@@ -80,18 +94,18 @@ let books = [
 ]
 
 const typeDefs = gql`
-  type Book {
-    title: String!
-    published: Int!
-    author: String!
-    genres: [String!]!
-    id: ID!
-  }
-
   type Author {
     name: String!
     born: Int
     bookCount: Int!
+    id: ID!
+  }
+
+  type Book {
+    title: String!
+    published: Int!
+    author: Author!
+    genres: [String!]!
     id: ID!
   }
 
@@ -120,7 +134,7 @@ const resolvers = {
   },
 
   Query: {
-    bookCount: () => books.length,
+    bookCount: () => Book.collection.countDocuments(),
     allBooks: (root, args) => {
       if(!(args.author || args.genre)) return books
       
@@ -129,21 +143,23 @@ const resolvers = {
         (!args.genre || book.genres.includes(args.genre))
       )
     },
-    authorCount: () => authors.length,
-    allAuthors: () => authors
+    authorCount: () => Author.collection.countDocuments(),
+    allAuthors: async () => await Author.find({})
   },
 
   Mutation:  {
-    addBook: (root, args) => {
-      const book = { ...args, id: uuid() }
+    addBook: async (root, args) => {
+      const book = new Book({ ...args })
 
-      if(!authors.includes(args.author)) {
-        const author = { name: args.author, id: uuid() }
-        authors = authors.concat(author)
+      let author = await Author.findOne({ name: args.author })
+      if(!author) {
+        author = new Author({ name: args.author, born: null })
+        author.save()
       }
 
-      books = books.concat(book)
-      return book
+      book.author = author
+
+      return book.save()
     },
 
     editAuthor: (root, args) => {
