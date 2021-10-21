@@ -74,12 +74,27 @@ const resolvers = {
       let author = await Author.findOne({ name: args.author })
       if(!author) {
         author = new Author({ name: args.author, born: null })
-        author.save()
+
+        try {
+          await author.save()
+        } catch (error) {
+          throw new UserInputError(error.message, { 
+            invalidArgs: args,
+          })
+        }
       }
 
       book.author = author
 
-      return book.save()
+      try {
+        await book.save()
+      } catch (error) {
+        throw new UserInputError(error.message, { 
+          invalidArgs: args,
+        })
+      }
+
+      return book
     },
 
     editAuthor: async (root, args) => {
@@ -90,7 +105,16 @@ const resolvers = {
       }
 
       author.born = args.setBornTo
-      return author.save()
+
+      try {
+        await author.save()
+      } catch (error) {
+        throw new UserInputError(error.message, { 
+          invalidArgs: args,
+        })
+      }
+
+      return author
     }
   }
 }
