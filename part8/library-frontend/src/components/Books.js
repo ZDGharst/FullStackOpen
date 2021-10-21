@@ -47,7 +47,7 @@ const Books = ({ books }) => {
       </table>
       <button onClick={() => setGenreFilter('')}>all genres</button>
       {genres.map(g =>
-        <button onClick={() => setGenreFilter(g)} style={{ marginLeft: 5 }}>
+        <button key={g} onClick={() => setGenreFilter(g)} style={{ marginLeft: 5 }}>
           {g}
         </button>)
       }

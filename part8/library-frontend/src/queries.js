@@ -20,7 +20,7 @@ query {
 `
 
 export const ME = gql`
-query me($username: String!, $password: String!) {
+query me {
   me {
     username
     favoriteGenre
