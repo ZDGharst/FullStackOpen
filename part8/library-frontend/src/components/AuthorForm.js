@@ -30,7 +30,7 @@ const AuthorForm = ({ authors }) => {
         <label htmlFor='author'>Author</label>
         <br />
         <select value={author} onChange={(event) => setAuthor(event.target.value)}>
-          {authors.map(a => <option value={a.name}>{a.name}</option>)}
+          {authors.map(a => <option key={a.id} value={a.name}>{a.name}</option>)}
         </select>
       </p>
       <p><label htmlFor='bornOn'>Year of Birth</label><br /><input name='bornOn' value={yearBorn} onChange={(event) => setYearBorn(event.target.value)} /></p>
