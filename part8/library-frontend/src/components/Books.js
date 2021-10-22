@@ -21,7 +21,7 @@ const Books = ({ books }) => {
 
   return (
     <div>
-      <h2>books</h2>
+      <h2>Books</h2>
 
       <table style={{ marginBottom: 10 }}>
         <tbody>

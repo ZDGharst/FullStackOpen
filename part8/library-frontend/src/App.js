@@ -33,7 +33,7 @@ const App = () => {
         return <Books books={queryResult.data.allBooks} />
       case 'recommended': {
         if(!token) setPage('authors')
-        return <Recommended books={queryResult.data.allBooks} />
+        return <Recommended />
       }
       case 'add': {
         if(!token) setPage('authors')

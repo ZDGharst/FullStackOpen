@@ -4,7 +4,7 @@ import AuthorForm from './AuthorForm'
 
 const Authors = ({ authors, token }) => (
   <div>
-    <h2>authors</h2>
+    <h2>Authors</h2>
     <table>
       <tbody>
         <tr>
