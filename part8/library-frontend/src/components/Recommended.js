@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import { useLazyQuery, useQuery } from '@apollo/client'
 import { BOOKS_BY_GENRE, ME } from "../queries"
 
@@ -9,12 +9,16 @@ const Recommended = () => {
   useEffect(() => {
     if(queryFavoriteGenre.data) {
       getBooks({ variables: { genre: queryFavoriteGenre.data.me.favoriteGenre }})
-      console.log('hello')
     }
-  }, [queryFavoriteGenre.data])
+  }, [queryFavoriteGenre.data]) //eslint-disable-line
 
   if (!booksResults.data) {
-    return <div>loading...</div>
+    return (
+    <div>
+      <h2>Recommended Books</h2>
+      <p>Loading...</p>
+    </div>
+    )
   }
 
   return (
