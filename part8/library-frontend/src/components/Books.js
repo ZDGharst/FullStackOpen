@@ -60,7 +60,6 @@ const Books = ({ books }) => {
             </th>
           </tr>
           {booksResults.data.allBooks
-            .filter(b => !genreFilter || b.genres.includes(genreFilter))
             .map(b =>
               <tr key={b.title}>
                 <td>{b.title}</td>
