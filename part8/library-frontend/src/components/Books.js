@@ -1,20 +1,8 @@
-import { useLazyQuery } from '@apollo/client'
 import React, { useEffect, useState } from 'react'
-import { BOOKS_BY_GENRE } from '../queries'
 
 const Books = ({ books }) => {
   const [genreFilter, setGenreFilter] = useState('')
   const [genres, setGenres] = useState([])
-  const [ getBooks, booksResults] = useLazyQuery(BOOKS_BY_GENRE, { fetchPolicy: "no-cache" })
-
-  useEffect(() => {
-    if(genreFilter) {
-      getBooks({ variables: { genre: genreFilter }})
-    } else {
-      getBooks()
-    }
-  }, [genreFilter]) //eslint-disable-line
-  console.log(booksResults)
 
   /* Builder for button labels for genre filter. */
   useEffect(() => {
@@ -32,15 +20,6 @@ const Books = ({ books }) => {
     setGenres(genreBuilder)
   }, [books])
 
-  if(!booksResults.data) {
-    return (
-      <div>
-        <h2>Books</h2>
-        <p>Loading...</p>
-      </div>
-    )
-  }
-
   return (
     <div>
       <h2>Books</h2>
@@ -56,7 +35,8 @@ const Books = ({ books }) => {
               published
             </th>
           </tr>
-          {booksResults.data.allBooks
+          {books
+            .filter(b => !genreFilter || b.genres.includes(genreFilter))
             .map(b =>
               <tr key={b.title}>
                 <td>{b.title}</td>

@@ -15,6 +15,7 @@ query {
     }
     published
     genres
+    id
   }
 }
 `
@@ -80,6 +81,7 @@ subscription {
     }
     published
     genres
+    id
   }
 }
 `

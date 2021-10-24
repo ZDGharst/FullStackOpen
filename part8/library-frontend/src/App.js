@@ -15,9 +15,23 @@ const App = () => {
   const queryResult = useQuery(AUTHORS_AND_BOOKS)
   const client = useApolloClient()
 
+  const updateCacheWith = (bookAdded) => {
+    const includedIn = (set, object) => 
+      set.map(p => p.id).includes(object.id)  
+
+    const dataInStore = client.readQuery({ query: AUTHORS_AND_BOOKS })
+    if (!includedIn(dataInStore.allBooks, bookAdded)) {
+      client.writeQuery({
+        query: AUTHORS_AND_BOOKS,
+        data: { allBooks: dataInStore.allBooks.concat(bookAdded), allAuthors: dataInStore.allAuthors }
+      })
+    }   
+  }
+
   useSubscription(BOOK_ADDED, {
     onSubscriptionData: ({ subscriptionData }) => {
-      console.log(subscriptionData)
+      const bookAdded = subscriptionData.data.bookAdded
+      updateCacheWith(bookAdded)
     }
   })
 
