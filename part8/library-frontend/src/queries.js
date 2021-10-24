@@ -62,12 +62,24 @@ mutation login($username: String!, $password: String!) {
 }
 `
 
-
 export const UPDATE_AUTHOR = gql`
 mutation updateAuthor($name: String!, $setBornTo: Int!) {
   editAuthor(name: $name, setBornTo: $setBornTo) {
     name
     born
+  }
+}
+`
+
+export const BOOK_ADDED = gql`
+subscription {
+  bookAdded {
+    title
+    author {
+      name
+    }
+    published
+    genres
   }
 }
 `

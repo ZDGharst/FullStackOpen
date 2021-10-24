@@ -13,9 +13,6 @@ const Books = ({ books }) => {
     } else {
       getBooks()
     }
-    if(booksResults.data) {
-      booksResults.refetch()
-    }
   }, [genreFilter]) //eslint-disable-line
   console.log(booksResults)
 
