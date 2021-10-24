@@ -8,7 +8,7 @@ const Book = require('../models/Book')
 
 const resolvers = {
   Author: {
-    bookCount: (root) => Book.collection.countDocuments({ author: mongoose.Types.ObjectId(root.id) })
+    bookCount: (root) => root.books.length
   },
 
   Query: {
@@ -34,17 +34,18 @@ const resolvers = {
       let author = await Author.findOne({ name: args.author })
       if (!author) {
         author = new Author({ name: args.author, born: null })
-
-        try {
-          await author.save()
-        } catch (error) {
-          throw new UserInputError(error.message, {
-            invalidArgs: args,
-          })
-        }
       }
 
       book.author = author
+      author.books = author.books.concat(book)
+
+      try {
+        await author.save()
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
+      }
 
       try {
         await book.save()
