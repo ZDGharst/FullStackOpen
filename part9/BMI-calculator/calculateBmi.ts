@@ -1,3 +1,4 @@
+
 /**
  * Calculates a person's BMI and returns their category.
  * @param {number} height - A person's height in centimeters. 
@@ -15,6 +16,10 @@ const calculateBmi = (height: number, mass: number): string => {
   else if(bmi >= 17.0) return 'Underweight (Mild thinness)';
   else if(bmi >= 16.0) return 'Underweight (Moderate thinness)';
   else return 'Underweight (Severe thinness)';
+}
+
+if(process.argv[2] && process.argv[3]) {
+  console.log(calculateBmi(parseInt(process.argv[2]), parseInt(process.argv[3])));
 }
 
 export default calculateBmi;

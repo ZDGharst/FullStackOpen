@@ -47,5 +47,9 @@ const calculateExercises = (exercises: number[], target: number): ExerciseResult
   };
 }
 
-const exercises: number[] = [3, 0, 2, 4.5, 0, 3, 1];
-console.log(calculateExercises(exercises, 2));
+if(process.argv[2] && process.argv[3]) {
+  const exercises = process.argv.slice(2).map(n => parseInt(n));
+  console.log(calculateExercises(exercises, parseInt(process.argv[2])));
+}
+
+export default calculateExercises;
