@@ -14,7 +14,7 @@ interface ExerciseResult {
  * @param target A target amount of average hours per day.
  * @returns An exercise result.
  */
-const calculateExercises = (exercises: number[], target: number): ExerciseResult => {
+const exerciseCalculator = (exercises: number[], target: number): ExerciseResult => {
   let totalHours = 0;
   let trainingDays = 0;
 
@@ -49,7 +49,7 @@ const calculateExercises = (exercises: number[], target: number): ExerciseResult
 
 if(process.argv[2] && process.argv[3]) {
   const exercises = process.argv.slice(2).map(n => parseInt(n));
-  console.log(calculateExercises(exercises, parseInt(process.argv[2])));
+  console.log(exerciseCalculator(exercises, parseInt(process.argv[2])));
 }
 
-export default calculateExercises;
+export default exerciseCalculator;
