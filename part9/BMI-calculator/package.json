@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node index.ts",
-    "dev":"ts-node-dev index.ts",
+    "dev": "ts-node-dev index.ts",
     "ts-node": "ts-node",
     "calculateBmi": "ts-node calculateBmi.ts",
     "exerciseCalculator": "ts-node exerciseCalculator.ts",
@@ -17,6 +17,9 @@
   "devDependencies": {
     "@types/express": "^4.17.13",
     "@types/node": "^16.11.4",
+    "@typescript-eslint/eslint-plugin": "^5.2.0",
+    "@typescript-eslint/parser": "^5.2.0",
+    "eslint": "^8.1.0",
     "ts-node": "^10.4.0",
     "ts-node-dev": "^1.1.8",
     "tslib": "^2.3.1",

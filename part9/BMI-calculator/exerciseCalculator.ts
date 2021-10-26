@@ -15,19 +15,19 @@ interface ExerciseResult {
  * @returns An exercise result.
  */
 const calculateExercises = (exercises: number[], target: number): ExerciseResult => {
-  let totalHours: number = 0
-  let trainingDays: number = 0;
+  let totalHours = 0;
+  let trainingDays = 0;
 
   exercises.forEach((e) => {
     totalHours += e;
     if(e !== 0) {
       trainingDays++;
     }
-  })
+  });
 
-  const average: number = totalHours / exercises.length
-  let rating: number = 1;
-  let ratingDescription: string = 'Quit slacking, you have goals to meet.';
+  const average: number = totalHours / exercises.length;
+  let rating = 1;
+  let ratingDescription = 'Quit slacking, you have goals to meet.';
   if (average >= target) {
     rating = 3;
     ratingDescription = 'Great job! Keep it up!';
@@ -45,7 +45,7 @@ const calculateExercises = (exercises: number[], target: number): ExerciseResult
     target,
     average,
   };
-}
+};
 
 if(process.argv[2] && process.argv[3]) {
   const exercises = process.argv.slice(2).map(n => parseInt(n));
