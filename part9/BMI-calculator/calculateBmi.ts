@@ -17,4 +17,4 @@ const calculateBmi = (height: number, mass: number): string => {
   else return 'Underweight (Severe thinness)';
 }
 
-console.log(calculateBmi(170, 72));
+export default calculateBmi;
