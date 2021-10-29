@@ -10,6 +10,10 @@ router.get('/', (_req, res) => {
   res.json(patientService.getPatientsWithoutSSN());
 });
 
+router.get('/:id', (req, res) => {
+  res.json(patientService.getPatientByID(req.params.id));
+});
+
 router.post('/', (req: express.Request, res: express.Response) => {
   try {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
