@@ -1,7 +1,10 @@
 import React from 'react'
+import { CoursePart } from '../types';
+import Part from './Part';
 
-const Content = ({ courseParts }: { courseParts: Array<any> }) => {
-  return <>{courseParts.map(c => <p key={c.name}>{c.name} {c.exerciseCount}</p>)}</>;
-};
+const Content = ({ courseParts }: { courseParts: Array<CoursePart> }) => 
+  <>
+    {courseParts.map(c => <Part key={c.name} course={c} />)}
+  </>;
 
 export default Content;
