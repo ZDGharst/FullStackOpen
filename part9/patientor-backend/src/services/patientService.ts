@@ -36,6 +36,4 @@ const addPatient = (patient: NewPatient): Patient => {
   return newPatient;
 };
 
-patientData.forEach(p => addPatient(p));
-
 export default { getPatients, getPatientsWithoutSSN, getPatientByID, addPatient };
