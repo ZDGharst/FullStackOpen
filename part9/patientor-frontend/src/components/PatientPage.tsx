@@ -7,7 +7,7 @@ import { addPatient, useStateValue } from '../state';
 import { Patient } from '../types';
 
 const PatientPage = () => {
-  const [{ patients }, dispatch] = useStateValue();
+  const [{ patients, diagnoses }, dispatch] = useStateValue();
 
   type PatientParams = {
     id: string;
@@ -39,11 +39,18 @@ const PatientPage = () => {
 
   const genderIcon = patient.gender === 'male' ? 'mars' : patient.gender ===  'female' ? 'venus' : 'genderless';
 
-
   return (<>
     <h2>{patient.name} <Icon name={genderIcon} /></h2>
     <p>SSN: {patient.ssn}</p>
     <p>Occupation: {patient.occupation}</p>
+    {patient.entries && patient.entries.map(e => 
+      <div key={e.id}>
+        <p>{e.date} <em>{e.description}</em></p>
+        <ul>
+          {e.diagnosisCodes && e.diagnosisCodes.map(d => <li key={d}>{d} {diagnoses.find(desc => desc.code === d)?.name}</li>)}
+        </ul>
+      </div>
+    )}
   </>);
 };
 
