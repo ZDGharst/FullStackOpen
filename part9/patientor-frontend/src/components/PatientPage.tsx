@@ -5,9 +5,10 @@ import { Icon } from 'semantic-ui-react';
 import { apiBaseUrl } from '../constants';
 import { addPatient, useStateValue } from '../state';
 import { Patient } from '../types';
+import EntryListing from './EntryListing';
 
 const PatientPage = () => {
-  const [{ patients, diagnoses }, dispatch] = useStateValue();
+  const [{ patients }, dispatch] = useStateValue();
 
   type PatientParams = {
     id: string;
@@ -43,14 +44,7 @@ const PatientPage = () => {
     <h2>{patient.name} <Icon name={genderIcon} /></h2>
     <p>SSN: {patient.ssn}</p>
     <p>Occupation: {patient.occupation}</p>
-    {patient.entries && patient.entries.map(e => 
-      <div key={e.id}>
-        <p>{e.date} <em>{e.description}</em></p>
-        <ul>
-          {e.diagnosisCodes && e.diagnosisCodes.map(d => <li key={d}>{d} {diagnoses.find(desc => desc.code === d)?.name}</li>)}
-        </ul>
-      </div>
-    )}
+    <EntryListing entries={patient.entries} />
   </>);
 };
 
