@@ -32,7 +32,11 @@ router.post('/:id/entries', (req: express.Request, res: express.Response) => {
     const addedEntry = patientService.addEntry(req.params.id, newEntry);
     res.json(addedEntry);
   } catch (error: unknown) {
-    res.status(400).send('Something went wrong.');
+    let errorMessage = 'Something went wrong.';
+    if(error instanceof Error) {
+      errorMessage += ' Error: ' + error.message;
+    }
+    res.status(400).send(errorMessage);
   }
 });
 

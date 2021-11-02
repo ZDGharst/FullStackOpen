@@ -33,10 +33,11 @@ const isStringArray = (diagnoseCodes: any): diagnoseCodes is string[] => {
   }
   
   // eslint-disable-next-line
-  diagnoseCodes.forEach(d => {
+  diagnoseCodes.forEach((d: unknown) => {
     if(!isString(d)) {
       return false;
     }
+    return true;
   });
 
   return true;

@@ -2,6 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import { useParams } from 'react-router';
 import { Icon } from 'semantic-ui-react';
+import AddEntryForm from '../AddEntryForm/AddEntryForm';
 import { apiBaseUrl } from '../constants';
 import { addPatient, useStateValue } from '../state';
 import { Patient } from '../types';
@@ -44,6 +45,7 @@ const PatientPage = () => {
     <h2>{patient.name} <Icon name={genderIcon} /></h2>
     <p>SSN: {patient.ssn}</p>
     <p>Occupation: {patient.occupation}</p>
+    <AddEntryForm patientId={id} />
     <EntryListing entries={patient.entries} />
   </>);
 };
