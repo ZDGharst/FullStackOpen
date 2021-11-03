@@ -8,6 +8,7 @@ import LineItem from './LineItem';
 
 const AddEntryForm = ({ patientId }: { patientId: string }) => {
   const [, dispatch] = useStateValue();
+  const [error, setError] = useState('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
   const [specialist, setSpecialist] = useState('');
@@ -58,12 +59,17 @@ const AddEntryForm = ({ patientId }: { patientId: string }) => {
 
       dispatch(serviceAddEntry(patientId, newEntry));
     } catch (error: unknown) {
-      console.log('Something went wrong.');
+      let errorMessage = 'Something went wrong.';
+      if(axios.isAxiosError(error) && error.response && typeof error.response.data === 'string') {
+        errorMessage = error.response.data;
+      }
+      setError(errorMessage);
     }
   };
 
   return (
     <form onSubmit={addEntry}>
+      <p style={{ color: 'red', fontWeight: 'bold' }}>{error}</p>
       <LineItem name='Description' value={description} onChange={setDescription} />
       <LineItem name='Date' value={date} onChange={setDate} />
       <LineItem name='Specialist' value={specialist} onChange={setSpecialist} />
