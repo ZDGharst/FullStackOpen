@@ -17,6 +17,8 @@ const AddEntryForm = ({ patientId }: { patientId: string }) => {
   const [type, setType] = useState('HealthCheck');
 
   const [healthCheckRating, setHealthCheckRating] = useState('Healthy');
+  const [dischargeDate, setDischargeDate] = useState('');
+  const [dischargeCriteria, setDischargeCriteria] = useState('');
 
   const addDiagnosisCode = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -37,6 +39,13 @@ const AddEntryForm = ({ patientId }: { patientId: string }) => {
             <option value='CriticalRisk'>Critical Risk</option>
           </select></div>
         );
+      case 'Hospital':
+        return (
+          <>
+            <LineItem name='Discharge Date' value={dischargeDate} onChange={setDischargeDate} />
+            <LineItem name='Discharge Criteria' value={dischargeCriteria} onChange={setDischargeCriteria} />
+          </>
+        );
       default:
         return null;
     }
@@ -53,7 +62,9 @@ const AddEntryForm = ({ patientId }: { patientId: string }) => {
           specialist,
           diagnosisCodes,
           type,
-          healthCheckRating
+          healthCheckRating,
+          dischargeDate,
+          dischargeCriteria
         }
       );
 
@@ -79,6 +90,7 @@ const AddEntryForm = ({ patientId }: { patientId: string }) => {
       <label htmlFor='Type'>Type</label><br />
       <div><select id='Type' name='Type' onChange={(e) => setType(e.target.value)}>
         <option value='HealthCheck' defaultChecked>Health Check</option>
+        <option value='Hospital'>Hospital</option>
       </select></div>
       {typeExtension()}
       <button>Add entry</button>
@@ -87,3 +99,20 @@ const AddEntryForm = ({ patientId }: { patientId: string }) => {
 };
 
 export default AddEntryForm;
+
+// interface HospitalEntry extends BaseEntry {
+//   type: "Hospital";
+//   discharge: {
+//     date: string;
+//     criteria: string;
+//   };
+// }
+
+// interface OccupationalHealthcareEntry extends BaseEntry {
+//   type: "OccupationalHealthcare";
+//   employerName: string;
+//   sickLeave?: {
+//     startDate: string;
+//     endDate: string;
+//   }
+// }

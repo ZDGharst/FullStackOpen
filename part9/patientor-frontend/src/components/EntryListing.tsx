@@ -33,7 +33,7 @@ const EntryListing = ({ entries }: { entries: Entry[] }) => {
       case 'Hospital':
         return (
           <div key={e.id} style={style}>
-            <p>Health Check</p>
+            <p>Hospital Visit</p>
             <p>{e.date}: <em>{e.description}</em></p>
             <p>Discharge date: {e.discharge.date}</p>
             <p>Discharge criteria: {e.discharge.criteria}</p>
@@ -45,7 +45,7 @@ const EntryListing = ({ entries }: { entries: Entry[] }) => {
       case 'OccupationalHealthcare':
         return (
           <div key={e.id} style={style}>
-            <p>Health Check</p>
+            <p>Occupational Healthcaree</p>
             <p>{e.date}: <em>{e.description}</em></p>
             <p>{e.sickLeave ? `Sick leave from ${e.sickLeave.startDate} to ${e.sickLeave.endDate}` : null}</p>
             <ul>
