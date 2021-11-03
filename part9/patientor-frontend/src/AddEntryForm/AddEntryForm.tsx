@@ -17,8 +17,14 @@ const AddEntryForm = ({ patientId }: { patientId: string }) => {
   const [type, setType] = useState('HealthCheck');
 
   const [healthCheckRating, setHealthCheckRating] = useState('Healthy');
+
   const [dischargeDate, setDischargeDate] = useState('');
   const [dischargeCriteria, setDischargeCriteria] = useState('');
+
+  const [employerName, setEmployerName] = useState('');
+  const [sickLeaveStart, setSickLeaveStart] = useState('');
+  const [sickLeaveEnd, setSickLeaveEnd] = useState('');
+  
 
   const addDiagnosisCode = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -46,6 +52,14 @@ const AddEntryForm = ({ patientId }: { patientId: string }) => {
             <LineItem name='Discharge Criteria' value={dischargeCriteria} onChange={setDischargeCriteria} />
           </>
         );
+      case 'OccupationalHealthcare':
+        return (
+          <>
+            <LineItem name='Employer Name' value={employerName} onChange={setEmployerName} />
+            <LineItem name='Sick Leave Start' value={sickLeaveStart} onChange={setSickLeaveStart} />
+            <LineItem name='Sick Leave End' value={sickLeaveEnd} onChange={setSickLeaveEnd} />
+          </>
+        );
       default:
         return null;
     }
@@ -64,7 +78,10 @@ const AddEntryForm = ({ patientId }: { patientId: string }) => {
           type,
           healthCheckRating,
           dischargeDate,
-          dischargeCriteria
+          dischargeCriteria,
+          employerName,
+          sickLeaveStart,
+          sickLeaveEnd
         }
       );
 
@@ -90,7 +107,8 @@ const AddEntryForm = ({ patientId }: { patientId: string }) => {
       <label htmlFor='Type'>Type</label><br />
       <div><select id='Type' name='Type' onChange={(e) => setType(e.target.value)}>
         <option value='HealthCheck' defaultChecked>Health Check</option>
-        <option value='Hospital'>Hospital</option>
+        <option value='Hospital'>Hospital Visit</option>
+        <option value='OccupationalHealthcare'>Occupational Healthcare</option>
       </select></div>
       {typeExtension()}
       <button>Add entry</button>
@@ -99,14 +117,6 @@ const AddEntryForm = ({ patientId }: { patientId: string }) => {
 };
 
 export default AddEntryForm;
-
-// interface HospitalEntry extends BaseEntry {
-//   type: "Hospital";
-//   discharge: {
-//     date: string;
-//     criteria: string;
-//   };
-// }
 
 // interface OccupationalHealthcareEntry extends BaseEntry {
 //   type: "OccupationalHealthcare";
