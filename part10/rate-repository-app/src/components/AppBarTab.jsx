@@ -4,7 +4,7 @@ import theme from "../theme";
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    padding: 15,
   },
   text: {
     color: theme.colors.AppBarText,
