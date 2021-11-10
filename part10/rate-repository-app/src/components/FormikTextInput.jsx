@@ -6,7 +6,9 @@ import TextInput from './TextInput';
 
 const styles = StyleSheet.create({
   errorText: {
-    marginTop: 5,
+    color: 'red',
+    marginBottom: 5,
+    marginLeft: 25,
   },
 });
 
