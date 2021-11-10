@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import Constants from 'expo-constants';
 
 import theme from '../theme';
 import AppBarTab from './AppBarTab';
+import { Link } from 'react-router-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,7 +16,10 @@ const styles = StyleSheet.create({
 const AppBar = () => {
   return (
     <View style={styles.container}>
-      <AppBarTab />
+      <ScrollView horizontal>
+        <AppBarTab to="/" title="Repositories" />
+        <AppBarTab to="/signin" title="Sign In" />
+      </ScrollView>
     </View>
   );
 };
