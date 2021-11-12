@@ -22,3 +22,12 @@ query {
   }
 }
 `;
+
+export const AUTHORIZE = gql`
+query {
+  authorizedUser {
+    id
+    username
+  }
+}
+`;
