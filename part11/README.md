@@ -39,3 +39,69 @@ For self-hosted options, Jenkins is the most popular. For cloud-hosted, GitHub A
 | Secrets are never exposed. | Secrets could be exposted by those who get access. |
 | Resources are limited only to the hardware purchased. | Resources are often set and can't be changed. |
 | Great for larger and enterprise projects with multiple teams and projects. | Great for small and medium projects. |
+
+## GitHub Actions
+
+GitHub Actions work on a basis of workflows. A workflow is a series of jobs that are run in parallel; each job contains steps that are run in series. GitHub actions are triggered by some sort of event (push, pull request, cron job, Slack message, etc.), have a workflow that is performed, then cleanup after. Workflows are processes that are setup a `.github/workflows` folder within the root repository using yaml configuration files. Examples:
+
+```yaml
+name: Hello World!
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Say hello
+        run: |
+          echo "Hello World!"
+```
+
+```yaml
+name: Deployment pipeline
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches: [master]
+    types: [opened, synchronize]
+
+jobs:
+  simple_deployment_pipeline:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - name: npm install
+        run: npm install
+      - name: lint
+        run: npm run eslint
+      - name: build
+        run: npm run build
+      - name: test
+        run: npm run test
+```
+
+## What does a good deployment system do?
+
+A good deployment system must:
+
+- Fail gracefully at any step.
+- Neever leave our software in a broken step.
+- Notify on a failure.
+- Roll back to a previous deployment.
+- Handle users before/during deployment.
+- Requirements areemet.
+
+We would like for our deployment system to also:
+
+- Be fast.
+- Have nearly zero downtime.
