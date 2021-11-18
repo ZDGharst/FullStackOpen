@@ -44,7 +44,7 @@ const style = StyleSheet.create({
   }
 });
 
-const FlexItem = ({ name, value }) => {
+const FlexItem = ({ name, value, testID }) => {
   const round = (number, places) => {
     return +(Math.round(number + "e+" + places) + "e-" + places);
   };
@@ -55,7 +55,7 @@ const FlexItem = ({ name, value }) => {
 
   return (
     <View style={style.flexItem}>
-      <Text style={style.itemValue}>{value}</Text>
+      <Text testID={testID} style={style.itemValue}>{value}</Text>
       <Text style={{ textAlign: 'center' }}>{name}</Text>
     </View>
   );
@@ -69,16 +69,16 @@ const RepositoryItem = ({ item }) => {
           <Image style={style.profileImage} source={{ uri: item.ownerAvatarUrl}} />
         </View>
         <View>
-          <Text style={style.fullName}>{item.fullName}</Text>
-          <Text>{item.description}</Text>
-          <Text style={style.language}>{item.language}</Text>
+          <Text testID='fullName' style={style.fullName}>{item.fullName}</Text>
+          <Text testID='description'>{item.description}</Text>
+          <Text testID='language' style={style.language}>{item.language}</Text>
         </View>
       </View>
       <View style={style.flexItems}>
-        <FlexItem name='Stars' value={item.stargazersCount} />
-        <FlexItem name='Forks' value={item.forksCount} />
-        <FlexItem name='Reviews' value={item.reviewCount} />
-        <FlexItem name='Rating' value={item.ratingAverage} />
+        <FlexItem testID='stargazersCount' name='Stars' value={item.stargazersCount} />
+        <FlexItem testID='forksCount' name='Forks' value={item.forksCount} />
+        <FlexItem testID='reviewCount' name='Reviews' value={item.reviewCount} />
+        <FlexItem testID='ratingAverage' name='Rating' value={item.ratingAverage} />
       </View>
     </View>
   );

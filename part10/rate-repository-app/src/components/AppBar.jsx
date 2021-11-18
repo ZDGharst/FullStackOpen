@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
   },
 });
 
-
 const AppBar = () => {
   const { data, loading } = useQuery(AUTHORIZE);
   const authStorage = useAuthStorage();
