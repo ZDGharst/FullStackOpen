@@ -24,3 +24,6 @@ The image *hello-world* was not on our machine, so it downloaded and ran it from
 Image names are in the following format: `registry/organization/image:tag`. In this case, the 3 missing fields defaulted to: `index.docker.io/library/hello-world:latest`. The digest is a unique hash that represent the image; it represents whether an image has changed or not.
 
 We can use `docker container ls -a` to list all containers that have been exited. A container can be started again with `docker start [ID OR NAME]`. We can kill a running container with `docker kill [ID OR NAME]`. Other commands: `docker image`, `docker commit`, `docker run [image]`.
+
+## Dockerfile
+
