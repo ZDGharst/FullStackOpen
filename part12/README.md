@@ -1,6 +1,6 @@
 # Part 12 - Introduction to Containers
 
-Containers encapsulate your appplication into a single package. This package includes all of the dependencies with the application; each container can run isolated from the other containers. Containers prevent the application inside from accessing files and resources of the device. Containers are OS-level virtualization; they are relatively lightweight and can be quick to scale. They can be ran identically almost anywhere.
+Containers encapsulate your application into a single package. This package includes all of the dependencies with the application; each container can run isolated from the other containers. Containers prevent the application inside from accessing files and resources of the device. Containers are OS-level virtualization; they are relatively lightweight and can be quick to scale. They can be ran identically almost anywhere.
 
 ## Containers and Images
 
@@ -27,3 +27,41 @@ We can use `docker container ls -a` to list all containers that have been exited
 
 ## Dockerfile
 
+A Dockerfile is a simple text file that contains the instructions for creating a new image. A Dockerfile might look like this:
+
+```Dockerfile
+FROM node:16
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN npm ci --only-production
+
+ENV DEBUG=playground:*
+
+CMD npm start
+```
+
+Because this Dockerfile will copy all files from the Dockerfile's directory to the working directory, we want to add a .dockerignore in the same type of format as a .gitignore. This is down to create a smaller, more minimal image.
+
+## Using docker-compose
+
+Instead of memorizing complicated scripts, or writing .sh files, we can create yaml files to manage our images to declare what we want to do allowing for more expressive methods.
+
+```yml
+version: '3.8'            # Version 3.8 is quite new and should work
+
+services:
+  app:                    # The name of the service, can be anything
+    image: express-server # Declares which image to use
+    build: .              # Declares where to build if image is not found
+    ports:                # Declares the ports to publish
+      - 3000:3000
+```
+
+Now we can use `docker-compose up` to build a run; rebuild with the ``-build`` flag, run in the background with the detached `-d` flag, and `docker-compose down` to shut down the image.
+
+## Utilizing containers in development
+
+Improve quality of life.
