@@ -62,6 +62,67 @@ services:
 
 Now we can use `docker-compose up` to build a run; rebuild with the ``-build`` flag, run in the background with the detached `-d` flag, and `docker-compose down` to shut down the image.
 
-## Utilizing containers in development
+## Utilizing containers for development
 
-Improve quality of life.
+Reasons to develop in containers:
+
+* Improve the quality of life of development by bypassing the need to install and configure tools more than one time by utilizing containers for development. We can bind files via setting volumes within docker-compose files.
+* Keep the environment similar between development and production to prevent bugs that appear only in production.
+* Avoid differences between developers and their personal environments.
+* Help new team members hop in by having them install container runtime only.
+
+```yaml
+  mongo:
+    image: mongo
+    ports:
+     - 3456:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: the_database
+    volumes:       - ./mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+```
+
+Data can be persisted across containers through the use of volumes. For example, you can bind ./mongo\_data on your machine to /data/db in the container.
+
+## More Docker Commands
+
+`exec` is a handy command to jump straight into a running container. `volume` allows for listing, inspecting, deleting, etc. volumes.
+
+## Using multiple stages
+
+A Dockerfile can include multiple stages.
+
+```Docker
+# The first FROM is now a stage called build-stage
+FROM node:16 AS build-stage
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN npm ci
+
+RUN npm run build
+
+# This is a new stage, everything before this is gone, except the files we want to COPY
+FROM nginx:1.20-alpine
+
+# COPY the directory build from build-stage to /usr/share/nginx/html
+# The target location here was found from the docker hub page
+COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html
+```
+
+## Communication between containers
+
+Communicating between containers in the same docker network is very easy:
+
+```
+$ docker-compose run debug-helper wget -O - http://hello-front-dev:3000
+```
+
+The "domain name" in this case is just the name of the container in the docker-compose file. In a more ambitious environment, a reverse proxy would need to be used, such as Nginx or Apache.
+
+## Next Steps
+
+While containers are fun for development, they're best used in production. The next step in learning is in orchestration tooling, such as Kubernetes.
+
